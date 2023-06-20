@@ -384,7 +384,12 @@ function displayAllData(data) {
   }
 
   // Bouton de paiement
-  if (data.status === 15 && !data.isPaid && data.paymentOnline) {
+  if (
+    data.status === 15 &&
+    !data.isPaid &&
+    data.paymentOnline &&
+    data.stripePaymentStatus !== 0
+  ) {
     PaymentButton.style.display = "block";
   }
   PaymentButton.onclick = () => {
@@ -553,57 +558,59 @@ function rejectUpdate(data) {
 function sendMail(requestState, requestData) {
   let urlmailRequest = apiUrl + "request-mail/";
 
-  // changer le "to" avec les mails de l'event ! (boucle si il y en a plusieurs)
-  var mailJson = {
-    to: "guillaume.degan@free.fr",
-    subject:
-      "Demande de stand validée par " +
-      requestData.client.firstName +
-      " " +
-      requestData.client.lastName +
-      " de " +
-      requestData.client.companyName,
-    text:
-      "Le client a validé la demande : https://imagin-expo-df9765.webflow.io/admin/admin-detail-demande#" +
-      requestData._id,
-  };
-
-  if (requestState === 0) {
-    mailJson = {
-      ...mailJson,
+  const emails = requestData.event.emails.split(",").map((mail) => mail.trim());
+  emails.map((email) => {
+    var mailJson = {
+      to: email,
       subject:
-        "Demande de stand refusée par " +
+        "[VALIDATION] Demande de stand validée par " +
         requestData.client.firstName +
         " " +
         requestData.client.lastName +
         " de " +
         requestData.client.companyName,
       text:
-        "Le client a refusé la demande : https://imagin-expo-df9765.webflow.io/admin/admin-detail-demande#" +
+        "Le client a validé la demande : https://imagin-expo-df9765.webflow.io/admin/admin-detail-demande#" +
         requestData._id,
     };
-  }
 
-  const mailxhr = new XMLHttpRequest();
-
-  // listen for `load` event
-  mailxhr.onload = () => {
-    // print JSON response
-    if (mailxhr.status >= 200 && mailxhr.status < 300) {
-      // parse JSON
-      const response = JSON.parse(mailxhr.responseText);
-      console.log(response);
+    if (requestState === 0) {
+      mailJson = {
+        ...mailJson,
+        subject:
+          "[ANNULATION] Demande de stand annulée par " +
+          requestData.client.firstName +
+          " " +
+          requestData.client.lastName +
+          " de " +
+          requestData.client.companyName,
+        text:
+          "Le client a annulé la demande : https://imagin-expo-df9765.webflow.io/admin/admin-detail-demande#" +
+          requestData._id,
+      };
     }
-  };
 
-  // open request
-  mailxhr.open("POST", urlmailRequest);
+    const mailxhr = new XMLHttpRequest();
 
-  // set `Content-Type` header
-  mailxhr.setRequestHeader("Content-Type", "application/json");
+    // listen for `load` event
+    mailxhr.onload = () => {
+      // print JSON response
+      if (mailxhr.status >= 200 && mailxhr.status < 300) {
+        // parse JSON
+        const response = JSON.parse(mailxhr.responseText);
+        console.log(response);
+      }
+    };
 
-  // send rquest with JSON payload
-  mailxhr.send(JSON.stringify(mailJson));
+    // open request
+    mailxhr.open("POST", urlmailRequest);
+
+    // set `Content-Type` header
+    mailxhr.setRequestHeader("Content-Type", "application/json");
+
+    // send rquest with JSON payload
+    mailxhr.send(JSON.stringify(mailJson));
+  });
 }
 
 // encodage de l'image chargée

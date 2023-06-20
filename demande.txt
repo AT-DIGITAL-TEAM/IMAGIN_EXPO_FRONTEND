@@ -542,7 +542,7 @@ function sendRequestRecapMail(response) {
     text:
       "Voici votre récapitulatif de demande de stand chez IMAGIN'EXPO : https://imagin-expo-df9765.webflow.io/recapitulatif-demande-de-stand#" +
       response.eventRequest._id,
-    subject: "Récapitulatif de stand",
+    subject: "[IMAGIN'EXPO] Récapitulatif de stand",
   };
 
   let urlMailRequest = apiUrl.toString() + "request-mail";
@@ -612,10 +612,7 @@ const getInfoClientContainer = document.getElementById(
 const NextStepButton = document.getElementById("NextStepButton");
 const errorRequestFirstPart = document.getElementById("errorRequestFirstPart");
 NextStepButton.onclick = function () {
-  if (
-    RequestStandNumber.value === "" ||
-    (isHallOptionTrue && RequestHall.value === "")
-  ) {
+  if (RequestStandNumber.value === "") {
     errorRequestFirstPart.style.display = "block";
   } else {
     getInfoClientContainer.style.display = "block";

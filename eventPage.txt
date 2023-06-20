@@ -577,6 +577,21 @@ function modifierevent(
       return;
     }
 
+    let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    let isEmailValid = true;
+    const emails = PopUpEventEmail.value.split(",").map((mail) => mail.trim());
+    emails.map((email) => {
+      if (!emailPattern.test(email)) {
+        document.getElementById("ErrorSentForm").style.display = "block";
+        document.getElementById("ErrorSentForm").innerHTML =
+          "Les emails doivent être corrects et séparés par une virgule";
+        isEmailValid = false;
+        return;
+      }
+    });
+
+    if (!isEmailValid) return;
+
     // json avec le contenu à envoyer en post
     const json = {
       event: {
@@ -840,6 +855,21 @@ AddEventButton.onclick = function (e) {
       "Le code doit être au format 0000-MANIFESTATION-VILLE";
     return;
   }
+
+  let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  let isEmailValid = true;
+  const emails = PopUpEventEmail.value.split(",").map((mail) => mail.trim());
+  emails.map((email) => {
+    if (!emailPattern.test(email)) {
+      document.getElementById("ErrorSentForm").style.display = "block";
+      document.getElementById("ErrorSentForm").innerHTML =
+        "Les emails doivent être corrects et séparés par une virgule";
+      isEmailValid = false;
+      return;
+    }
+  });
+
+  if (!isEmailValid) return;
 
   // json qui sera envoyé
   const json = {

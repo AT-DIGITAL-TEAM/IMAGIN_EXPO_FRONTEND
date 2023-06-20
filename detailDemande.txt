@@ -880,7 +880,7 @@ function updateRequest(data) {
     // json du mail
     var mailJson = {
       to: document.getElementById("inputClientEmail").value,
-      subject: "Votre demande de stand chez Imagin'Expo",
+      subject: "[IMAGIN'EXPO] Votre demande de stand chez Imagin'Expo",
       text:
         "Des modifications ont été faites sur votre demande de stand : https://imagin-expo-df9765.webflow.io/recapitulatif-demande-de-stand#" +
         data._id,
