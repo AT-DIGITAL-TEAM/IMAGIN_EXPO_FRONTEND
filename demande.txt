@@ -13,6 +13,12 @@ const RequestTotalTTC = document.getElementById("RequestTotalTTC");
 const EventDescriptionContent = document.getElementById(
   "EventDescriptionContent"
 );
+const EventIllustrationContainer = document.getElementById(
+  "eventIllustrationContainer"
+);
+const ExampleProductsListContainer = document.getElementById(
+  "ExampleProductsContainer"
+);
 const EventContactContent = document.getElementById("EventContactContent");
 const TVACheckBox = document.getElementById("TVACheckbox");
 const TVAAmountText = document.getElementById("TVAAmountText");
@@ -174,6 +180,44 @@ function getEventData() {
         location.replace("/creation-demande#" + data._id);
       dropdownEN.onclick = () =>
         location.replace("/creation-demande-en#" + data._id);
+
+      if (data.illustration)
+        EventIllustrationContainer.innerHTML = `<img style="width: 100%" src="${data.illustration.image}">`;
+
+      if (data.productExamples.length !== 0) {
+        Object.values(data.productExamples).forEach((product) => {
+          const exampleProductContainer = document.createElement("div");
+          exampleProductContainer.className = "exempleproductcontainer";
+          const titleAndImageContainer = document.createElement("div");
+          titleAndImageContainer.className = "div-block-95";
+          const title = document.createElement("div");
+          title.className = "text-block-70";
+          title.innerHTML = product.name;
+          const image = document.createElement("img");
+          image.src = product.image;
+          titleAndImageContainer.appendChild(title);
+          titleAndImageContainer.appendChild(image);
+          const descriptionContainer = document.createElement("div");
+          descriptionContainer.className = "div-block-96";
+          const descriptionTitle = document.createElement("div");
+          descriptionTitle.className = "text-block-71";
+          descriptionTitle.innerHTML = "Dimensions et tarif";
+          const description = document.createElement("div");
+          description.innerHTML = product.description;
+          descriptionContainer.appendChild(descriptionTitle);
+          descriptionContainer.appendChild(description);
+          exampleProductContainer.appendChild(titleAndImageContainer);
+          exampleProductContainer.appendChild(descriptionContainer);
+
+          ExampleProductsListContainer.appendChild(exampleProductContainer);
+        });
+      } else {
+        englishMode
+          ? (ExampleProductsListContainer.innerHTML =
+              "No product examples available...")
+          : (ExampleProductsListContainer.innerHTML =
+              "Pas d'exemples de produits disponibles...");
+      }
 
       // lister les produits exclus
       Object.values(data.excludedProducts).forEach((product) => {

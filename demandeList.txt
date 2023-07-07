@@ -36,12 +36,10 @@ function getData(page) {
     let data = dataBrut.eventRequests;
 
     currentRequestLength = data.length;
-    console.log(currentRequestLength);
     if (request.status >= 200 && request.status < 400) {
       // Manipuler les données reçues ici en fonction des ID du site
 
       Object.values(data).forEach((eventRequests) => {
-        console.log(eventRequests);
         const standRequest = document.createElement("div");
 
         standRequest.className = "demandelignesstyle";

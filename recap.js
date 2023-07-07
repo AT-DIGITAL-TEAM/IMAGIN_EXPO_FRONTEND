@@ -56,6 +56,9 @@ const PaymentButton = document.getElementById("PaymentButton");
 
 const itemsContainer = document.getElementById("itemsContainer");
 var itemsOfRequest = [];
+const customProductContainer = document.getElementById(
+  "customProductContainer"
+);
 
 // boutons de validation et de refus
 const RefusUpdateButton = document.getElementById("RefusUpdateButton");
@@ -480,6 +483,50 @@ function displayAllData(data) {
     if (!(itemsOfRequest.indexOf(item.product._id) > -1)) {
       itemsOfRequest.push(item.product._id);
     }
+  });
+
+  // remplissage des produits personnalisés
+  Object.values(data.customLineItems).forEach((item) => {
+    const productContainer = document.createElement("div");
+    productContainer.className = "div-block-89 customproductcontainer";
+    productContainer.setAttribute("id", item._id);
+    const productName = document.createElement("div");
+    productName.className = "text-block-62 customitemname";
+    productName.setAttribute("id", item._id + "customname");
+    productName.innerHTML = item.name;
+    productContainer.appendChild(productName);
+    const productDescription = document.createElement("div");
+    productDescription.className = "text-block-62 customitemdescription";
+    productDescription.innerHTML = item.size;
+    productDescription.setAttribute("id", item._id + "customdescription");
+    productContainer.appendChild(productDescription);
+    const productQuantity = document.createElement("div");
+    productQuantity.className =
+      "text-block-62 customitemquantity quantity" + item.name;
+    productQuantity.innerHTML = item.quantity;
+    productQuantity.setAttribute("id", item._id + "customquantity");
+    productContainer.appendChild(productQuantity);
+    const productPrice = document.createElement("div");
+    productPrice.className = "text-block-62 customitemprice";
+    productPrice.innerHTML = item.price;
+    productPrice.setAttribute("id", item._id + "customprice");
+    productContainer.appendChild(productPrice);
+    const deleteItem = document.createElement("div");
+    deleteItem.innerHTML = "x";
+    deleteItem.className = "deleteitems delete" + item._id;
+    deleteItem.style.display = "none";
+    // fonction pour supprimer le product de l'affichage
+    $(document).on("click", ".delete" + item._id, function () {
+      console.log("delete item " + item.name);
+      const inputNumber = document.getElementById(
+        item._id + "customquantityinput"
+      );
+      inputNumber.value = 0;
+      const ContainerItem = document.getElementById(item._id);
+      ContainerItem.style.display = "none";
+    });
+    productContainer.appendChild(deleteItem);
+    customProductContainer.appendChild(productContainer);
   });
 }
 

@@ -1,10 +1,14 @@
-let apiUrl = new URL(
-  "https://imagin-expo-backend-api.int.at-digital.fr/api/v1/"
-);
+let currentUrl = window.location.href;
+
+// différencier les liens prod / staging
+let apiUrl = currentUrl.includes("webflow")
+  ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
+  : new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/");
 
 // Recuperation des containers où mettre les infos détaillées de l'event
 const HeadingEvent = document.getElementById("HeadingEvent");
 const eventCode = document.getElementById("eventCode");
+const eventIllustration = document.getElementById("eventIllustration");
 const eventDescription = document.getElementById("eventDescription");
 const eventDateDebut = document.getElementById("eventDateDebut");
 const eventDateFin = document.getElementById("eventDateFin");
@@ -13,6 +17,7 @@ const eventEmails = document.getElementById("eventEmails");
 const eventPhone = document.getElementById("eventPhone");
 const eventCategories = document.getElementById("eventCategories");
 const eventExcludedProducts = document.getElementById("eventExcludedProducts");
+const eventExampleProducts = document.getElementById("eventExampleProducts");
 const eventOrderLimit = document.getElementById("eventOrderLimit");
 const eventFurnitureOption = document.getElementById("eventFurnitureOption");
 const eventHallOption = document.getElementById("eventHallOption");
@@ -51,6 +56,8 @@ const PopUpEventLocation = document.getElementById("PopUpEventLocation");
 const PopUpEventEmail = document.getElementById("PopUpEventEmail");
 const PopUpEventPhone = document.getElementById("PopUpEventPhone");
 const PopUpEventOrderLimit = document.getElementById("PopUpEventOrderLimit");
+const PopUpIllustration = document.getElementById("PopUpIllustration");
+const PopUpExampleProducts = document.getElementById("PopUpExampleProducts");
 const PopUpEventFurnitureOption = document.getElementById(
   "PopUpEventFurnitureOption"
 );
@@ -61,8 +68,96 @@ const PopUpDefaultPaymentMethod = document.getElementById(
 
 let eventSelected = "";
 
-// const AllCatChoosed = CatChoosedContainer.children;
-// const AllCatExcluded = CatExcludedContainer.children;
+// création du select d'image principale de l'evenement
+const fieldset = document.createElement("fieldset");
+fieldset.setAttribute("id", "IllustrationSelect");
+fieldset.style.marginBottom = "10px";
+const legend = document.createElement("legend");
+legend.innerHTML = "Image principale :";
+const scrollableFieldsetDiv = document.createElement("div");
+scrollableFieldsetDiv.setAttribute("id", "radioEventIllustrationContainer");
+scrollableFieldsetDiv.style.maxHeight = "350px";
+scrollableFieldsetDiv.style.overflow = "auto";
+scrollableFieldsetDiv.style.marginLeft = "10px";
+fieldset.appendChild(scrollableFieldsetDiv);
+fieldset.appendChild(legend);
+PopUpIllustration.appendChild(fieldset);
+
+// fonction qui récupère toutes les images d'illustration d'evenements
+function getEventIllustrations() {
+  let request = new XMLHttpRequest();
+
+  // Changer l'endpoint en ajoutant + 'newEndpoint'
+  let url = apiUrl.toString() + "event-illustrations";
+
+  request.open("GET", url, true);
+  request.setRequestHeader("ngrok-skip-browser-warning", 1);
+
+  request.onload = function () {
+    let dataBrut = JSON.parse(this.response);
+    let data = dataBrut.eventIllustrations;
+
+    if (request.status >= 200 && request.status < 400) {
+      Object.values(data).forEach((image) => {
+        const radioContainer = document.createElement("div");
+        const radioInput = document.createElement("input");
+        radioInput.type = "radio";
+        radioInput.name = "eventIllustration";
+        radioInput.setAttribute("id", image._id);
+        radioInput.value = image._id;
+        const radioLabel = document.createElement("label");
+        radioLabel.innerHTML = `<img style="width: 150px" src="${image.image}">`;
+        radioLabel.style.display = "inline";
+        radioLabel.style.marginLeft = "5px";
+
+        radioContainer.appendChild(radioInput);
+        radioContainer.appendChild(radioLabel);
+
+        document
+          .getElementById("radioEventIllustrationContainer")
+          .appendChild(radioContainer);
+      });
+    }
+  };
+  request.send();
+}
+
+// fonction qui récupère tous les exemples de produits
+function getExampleProducts() {
+  let request = new XMLHttpRequest();
+
+  // Changer l'endpoint en ajoutant + 'newEndpoint'
+  let url = apiUrl.toString() + "product-examples";
+
+  request.open("GET", url, true);
+  request.setRequestHeader("ngrok-skip-browser-warning", 1);
+
+  request.onload = function () {
+    let dataBrut = JSON.parse(this.response);
+    let data = dataBrut.productExamples;
+
+    if (request.status >= 200 && request.status < 400) {
+      Object.values(data).forEach((product) => {
+        var checkbox = document.createElement("input");
+        checkbox.setAttribute("type", "checkbox");
+        checkbox.setAttribute("id", product._id);
+        checkbox.value = product._id;
+        checkbox.className = "checkboxExampleProduct";
+        checkbox.style.marginRight = "5px";
+        var checkboxLabel = document.createElement("label");
+        checkboxLabel.innerHTML = product.name;
+        checkboxLabel.setAttribute("for", product.name);
+        var checkboxContainer = document.createElement("div");
+        checkboxContainer.style.display = "flex";
+        checkboxContainer.appendChild(checkbox);
+        checkboxContainer.appendChild(checkboxLabel);
+
+        PopUpExampleProducts.appendChild(checkboxContainer);
+      });
+    }
+  };
+  request.send();
+}
 
 // fonction qui renvoie la liste des events
 function getData() {
@@ -120,6 +215,22 @@ function getData() {
             eventSelected = event.name;
             eventCategories.innerHTML = "";
             eventExcludedProducts.innerHTML = "";
+            let illustrationId = null;
+            if (event.illustration) {
+              illustrationId = event.illustration._id;
+              eventIllustration.innerHTML = `<a href="${event.illustration.image}"><img style="width: 150px" src="${event.illustration.image}"></a>`;
+            } else {
+              eventIllustration.innerHTML = "Illustration par défaut";
+            }
+            let exampleProductList = [];
+            if (event.productExamples.length !== 0) {
+              Object.values(event.productExamples).forEach((product) => {
+                exampleProductList.push(product.name);
+              });
+            } else {
+              exampleProductList.push("Pas d'exemples de produits");
+            }
+            eventExampleProducts.innerHTML = exampleProductList.join(", ");
             HeadingEvent.innerHTML = event.name;
             eventCode.innerHTML = event.eventCode;
             eventEmails.innerHTML = event.emails;
@@ -176,11 +287,12 @@ function getData() {
                 event.excludedProducts,
                 event.furnitureOption,
                 event.hallOption,
-                event.defaultPaymentMethod
+                event.defaultPaymentMethod,
+                illustrationId,
+                event.productExamples
               );
             };
             eventButtonDuplicate.onclick = function () {
-              console.log("clicked");
               dupliquerevent(
                 event.name,
                 event.eventCode,
@@ -195,7 +307,9 @@ function getData() {
                 event.excludedProducts,
                 event.furnitureOption,
                 event.hallOption,
-                event.defaultPaymentMethod
+                event.defaultPaymentMethod,
+                illustrationId,
+                event.productExamples
               );
             };
             // fonction d'extraction des demandes liées à un événement
@@ -418,6 +532,8 @@ function getProductFromCategoryData(listProducts, excludedProducts) {
 
 (function () {
   getCatData();
+  getEventIllustrations();
+  getExampleProducts();
 })();
 
 // fonction de suppression de l'event
@@ -487,7 +603,9 @@ function modifierevent(
   excludedProducts,
   furnitureOption,
   hallOption,
-  defaultPaymentMethod
+  defaultPaymentMethod,
+  illustrationId,
+  exampleProducts
 ) {
   ExcludedProducts = excludedProducts;
   excludedProductSelected = [];
@@ -519,6 +637,28 @@ function modifierevent(
   }).format(new Date(OrderLimit));
   PopUpDefaultPaymentMethod.value = defaultPaymentMethod;
   textTopAddEventContainer.innerHTML = "Modification de l'événement " + nom;
+
+  if (illustrationId) {
+    document.getElementById(illustrationId).checked = true;
+  } else {
+    const illustrationsInputs = document.querySelectorAll(
+      'input[name="eventIllustration"]'
+    );
+    Object.values(illustrationsInputs).forEach((illu) => {
+      illu.checked = false;
+    });
+  }
+
+  const productExamplesChecked = document.querySelectorAll(
+    ".checkboxExampleProduct"
+  );
+  Object.values(productExamplesChecked).forEach((product) => {
+    if (exampleProducts.some((p) => p._id === product.value)) {
+      product.checked = true;
+    } else {
+      product.checked = false;
+    }
+  });
 
   const alreadycheckedCatChoosed = [];
   const alreadycheckedCatExcluded = [];
@@ -590,6 +730,20 @@ function modifierevent(
       }
     });
 
+    let productExamplesArray = [];
+    const productExamplesChecked = document.querySelectorAll(
+      ".checkboxExampleProduct"
+    );
+    Object.values(productExamplesChecked).forEach((product) => {
+      if (product.checked) productExamplesArray.push(product.value);
+    });
+
+    const illustrationId = document.querySelector(
+      'input[name="eventIllustration"]:checked'
+    )
+      ? document.querySelector('input[name="eventIllustration"]:checked').value
+      : null;
+
     if (!isEmailValid) return;
 
     // json avec le contenu à envoyer en post
@@ -613,6 +767,8 @@ function modifierevent(
         furnitureOption: PopUpEventFurnitureOption.checked,
         hallOption: PopUpEventHallOption.checked,
         defaultPaymentMethod: PopUpDefaultPaymentMethod.value,
+        productExamples: productExamplesArray,
+        illustration: illustrationId,
       },
     };
 
@@ -644,8 +800,6 @@ function modifierevent(
     // set `Content-Type` header
     xhr.setRequestHeader("Content-Type", "application/json");
 
-    console.log(JSON.stringify(json));
-
     // send rquest with JSON payload
     xhr.send(JSON.stringify(json));
   };
@@ -666,9 +820,10 @@ function dupliquerevent(
   excludedProducts,
   furnitureOption,
   hallOption,
-  defaultPaymentMethod
+  defaultPaymentMethod,
+  illustrationId,
+  exampleProducts
 ) {
-  console.log("clicked2");
   ExcludedProducts = excludedProducts;
   excludedProductSelected = [];
   Object.values(excludedProducts).forEach((product) => {
@@ -677,7 +832,8 @@ function dupliquerevent(
 
   // rempli le popup de création d'un nouvel event avec les infos de l'event à dupliquer
   AddEventButton.value = "Dupliquer";
-  PopUpEventCode.value = code;
+  PopUpEventName.value = "";
+  PopUpEventCode.value = "";
   PopUpEventEmail.value = email;
   PopUpEventPhone.value = phone;
   PopUpEventFurnitureOption.checked = furnitureOption;
@@ -698,6 +854,28 @@ function dupliquerevent(
   }).format(new Date(OrderLimit));
   PopUpDefaultPaymentMethod.value = defaultPaymentMethod;
   textTopAddEventContainer.innerHTML = "Duplication de l'événement " + nom;
+
+  if (illustrationId) {
+    document.getElementById(illustrationId).checked = true;
+  } else {
+    const illustrationsInputs = document.querySelectorAll(
+      'input[name="eventIllustration"]'
+    );
+    Object.values(illustrationsInputs).forEach((illu) => {
+      illu.checked = false;
+    });
+  }
+
+  const productExamplesChecked = document.querySelectorAll(
+    ".checkboxExampleProduct"
+  );
+  Object.values(productExamplesChecked).forEach((product) => {
+    if (exampleProducts.some((p) => p._id === product.value)) {
+      product.checked = true;
+    } else {
+      product.checked = false;
+    }
+  });
 
   const alreadycheckedCatChoosed = [];
   const alreadycheckedCatExcluded = [];
@@ -745,6 +923,20 @@ function dupliquerevent(
 
   // Fonction pour parametrer le bouton d'envoie du formulaire DE DUPLICATION
   AddEventButton.onclick = function () {
+    let productExamplesArray = [];
+    const productExamplesChecked = document.querySelectorAll(
+      ".checkboxExampleProduct"
+    );
+    Object.values(productExamplesChecked).forEach((product) => {
+      if (product.checked) productExamplesArray.push(product.value);
+    });
+
+    const illustrationId = document.querySelector(
+      'input[name="eventIllustration"]:checked'
+    )
+      ? document.querySelector('input[name="eventIllustration"]:checked').value
+      : null;
+
     const json = {
       event: {
         name: PopUpEventName.value,
@@ -765,6 +957,8 @@ function dupliquerevent(
         furnitureOption: PopUpEventFurnitureOption.checked,
         hallOption: PopUpEventHallOption.checked,
         defaultPaymentMethod: PopUpDefaultPaymentMethod.value,
+        productExamples: productExamplesArray,
+        illustration: illustrationId,
       },
     };
 
@@ -822,6 +1016,20 @@ function dupliquerevent(
     PopUpDefaultPaymentMethod.value = "";
     textTopAddEventContainer.innerHTML = "Nouvel événement";
 
+    const illustrationsInputs = document.querySelectorAll(
+      'input[name="eventIllustration"]'
+    );
+    Object.values(illustrationsInputs).forEach((illu) => {
+      illu.checked = false;
+    });
+
+    const productExamplesChecked = document.querySelectorAll(
+      ".checkboxExampleProduct"
+    );
+    Object.values(productExamplesChecked).forEach((product) => {
+      product.checked = false;
+    });
+
     ExcludedProducts = "";
 
     // affiche toute les catégories en choisies par défaut
@@ -871,6 +1079,20 @@ AddEventButton.onclick = function (e) {
 
   if (!isEmailValid) return;
 
+  let productExamplesArray = [];
+  const productExamplesChecked = document.querySelectorAll(
+    ".checkboxExampleProduct"
+  );
+  Object.values(productExamplesChecked).forEach((product) => {
+    if (product.checked) productExamplesArray.push(product.value);
+  });
+
+  const illustrationId = document.querySelector(
+    'input[name="eventIllustration"]:checked'
+  )
+    ? document.querySelector('input[name="eventIllustration"]:checked').value
+    : null;
+
   // json qui sera envoyé
   const json = {
     event: {
@@ -892,6 +1114,8 @@ AddEventButton.onclick = function (e) {
       hallOption: PopUpEventHallOption.checked ? true : false,
       furnitureOption: PopUpEventFurnitureOption.checked ? true : false,
       defaultPaymentMethod: PopUpDefaultPaymentMethod.value,
+      productExamples: productExamplesArray,
+      illustration: illustrationId,
     },
   };
 

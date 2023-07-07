@@ -91,6 +91,9 @@ const paymentIntentIdComponent = document.getElementById(
 const itemsContainer = document.getElementById("itemsContainer");
 var itemsOfRequest = [];
 const multipleErrorMsg = document.getElementById("multipleErrorMsg");
+const customProductContainer = document.getElementById(
+  "customProductContainer"
+);
 
 //Récupération des boutons
 
@@ -105,6 +108,9 @@ const DetailDemandeBackButton = document.getElementById(
 );
 const DetailDemandeExtractButton = document.getElementById(
   "DetailDemandeExtractButton"
+);
+const addCustomProductButton = document.getElementById(
+  "addCustomProductButton"
 );
 
 // Fonction pour récuperer l'event_request ciblé par la page
@@ -613,6 +619,50 @@ function displayAllData(data) {
     }
   });
 
+  // remplissage des produits personnalisés
+  Object.values(data.customLineItems).forEach((item) => {
+    const productContainer = document.createElement("div");
+    productContainer.className = "div-block-89 customproductcontainer";
+    productContainer.setAttribute("id", item._id);
+    const productName = document.createElement("div");
+    productName.className = "text-block-62 customitemname";
+    productName.setAttribute("id", item._id + "customname");
+    productName.innerHTML = item.name;
+    productContainer.appendChild(productName);
+    const productDescription = document.createElement("div");
+    productDescription.className = "text-block-62 customitemdescription";
+    productDescription.innerHTML = item.size;
+    productDescription.setAttribute("id", item._id + "customdescription");
+    productContainer.appendChild(productDescription);
+    const productQuantity = document.createElement("div");
+    productQuantity.className =
+      "text-block-62 customitemquantity quantity" + item.name;
+    productQuantity.innerHTML = item.quantity;
+    productQuantity.setAttribute("id", item._id + "customquantity");
+    productContainer.appendChild(productQuantity);
+    const productPrice = document.createElement("div");
+    productPrice.className = "text-block-62 customitemprice";
+    productPrice.innerHTML = item.price;
+    productPrice.setAttribute("id", item._id + "customprice");
+    productContainer.appendChild(productPrice);
+    const deleteItem = document.createElement("div");
+    deleteItem.innerHTML = "x";
+    deleteItem.className = "deleteitems delete" + item._id;
+    deleteItem.style.display = "none";
+    // fonction pour supprimer le product de l'affichage
+    $(document).on("click", ".delete" + item._id, function () {
+      console.log("delete item " + item.name);
+      const inputNumber = document.getElementById(
+        item._id + "customquantityinput"
+      );
+      inputNumber.value = 0;
+      const ContainerItem = document.getElementById(item._id);
+      ContainerItem.style.display = "none";
+    });
+    productContainer.appendChild(deleteItem);
+    customProductContainer.appendChild(productContainer);
+  });
+
   // Affectation des fonctions liées aux boutons
 
   DetailDemandeUpdateButton.onclick = function () {
@@ -824,12 +874,105 @@ function updateRequest(data) {
       '">';
   });
 
+  //infos custom items
+
+  const allcustomitemquantity = document.querySelectorAll(
+    ".customitemquantity"
+  );
+  const allcustomitemname = document.querySelectorAll(".customitemname");
+  const allcustomitemdescription = document.querySelectorAll(
+    ".customitemdescription"
+  );
+  const allcustomitemprice = document.querySelectorAll(".customitemprice");
+  Object.values(allcustomitemquantity).forEach((quantity) => {
+    quantity.innerHTML =
+      '<input id="' +
+      quantity.id +
+      'input" class="customQuantityInput" style="width: 75%" type="number" value="' +
+      quantity.innerHTML +
+      '">';
+  });
+  Object.values(allcustomitemname).forEach((name) => {
+    name.innerHTML =
+      '<input id="' +
+      name.id +
+      'input" class="customNameInput" style="width: 75%" type="text" value="' +
+      name.innerHTML +
+      '">';
+  });
+  Object.values(allcustomitemdescription).forEach((desc) => {
+    desc.innerHTML =
+      '<input id="' +
+      desc.id +
+      'input" class="customDescriptionInput" style="width: 75%" type="text" value="' +
+      desc.innerHTML +
+      '">';
+  });
+  Object.values(allcustomitemprice).forEach((price) => {
+    price.innerHTML =
+      '<input id="' +
+      price.id +
+      'input" class="customPriceInput" style="width: 75%" type="number" value="' +
+      price.innerHTML +
+      '">';
+  });
+
   // ajout du bouton d'ajout de nouveau produits dans chaque catégorie
 
   const allAddItemButton = document.querySelectorAll(".addproductbutton");
   Object.values(allAddItemButton).forEach((button) => {
     button.style.display = "block";
   });
+
+  //affichage du bouton d'ajout de nouveau produit personnalisé
+  addCustomProductButton.style.display = "block";
+  // Gestion du click sur le bouton d'ajout d'un nouveau produit personnalisé
+  let numberNewProduct = 0;
+  addCustomProductButton.onclick = function () {
+    const productContainer = document.createElement("div");
+    productContainer.className = "div-block-89 newcustomproduct";
+    const productName = document.createElement("div");
+    productName.className = "text-block-62";
+    productName.innerHTML =
+      '<input id="customNewProductNameInput' +
+      numberNewProduct +
+      '" style="width: 75%" type="text">';
+    const productDescription = document.createElement("div");
+    productDescription.className = "text-block-62";
+    productDescription.innerHTML =
+      '<input id="customNewProductDescriptionInput' +
+      numberNewProduct +
+      '" style="width: 75%" type="text">';
+    const productQuantity = document.createElement("div");
+    productQuantity.className = "text-block-62";
+    productQuantity.innerHTML =
+      '<input id="customNewProductQuantityInput' +
+      numberNewProduct +
+      '" style="width: 75%" type="number">';
+    // productQuantity.setAttribute("id", "item.product._id" + "quantity");
+    const productPrice = document.createElement("div");
+    productPrice.className = "text-block-62";
+    productPrice.innerHTML =
+      '<input id="customNewProductPriceInput' +
+      numberNewProduct +
+      '" style="width: 75%" type="number">';
+    const deleteItem = document.createElement("div");
+    deleteItem.innerHTML = "x";
+    deleteItem.className = "deleteitems";
+    deleteItem.onclick = function () {
+      console.log("delete created item");
+      productContainer.parentNode.removeChild(productContainer);
+    };
+
+    // injection de ces éléments dans l'emplacement des produits
+    productContainer.appendChild(productName);
+    productContainer.appendChild(productDescription);
+    productContainer.appendChild(productQuantity);
+    productContainer.appendChild(productPrice);
+    productContainer.appendChild(deleteItem);
+    customProductContainer.appendChild(productContainer);
+    numberNewProduct++;
+  };
 
   // ajout des boutons de suppression des produits deja affichés
   const allDeleteItemButton = document.querySelectorAll(".deleteitems");
@@ -863,7 +1006,7 @@ function updateRequest(data) {
           quantity: item.value,
         };
         verificationMultipleItems.push(item.id);
-        lineItems.push(uniqueItem);
+        if (uniqueItem.quantity > 0) lineItems.push(uniqueItem);
       }
     });
 
@@ -876,6 +1019,72 @@ function updateRequest(data) {
     if (document.getElementById("furnitureCheckbox").checked) {
       furnitureCheck = true;
     }
+
+    var customLineItems = [];
+    // custom product
+    const allCustomProductContainers = document.querySelectorAll(
+      ".customproductcontainer"
+    );
+    let number = 0;
+    Object.values(allCustomProductContainers).forEach((container) => {
+      const name = document.getElementById(
+        container.id + "customnameinput"
+      ).value;
+      const size = document.getElementById(
+        container.id + "customdescriptioninput"
+      ).value;
+      const price = document.getElementById(
+        container.id + "custompriceinput"
+      ).value;
+      const quantity = document.getElementById(
+        container.id + "customquantityinput"
+      ).value;
+
+      if (quantity > 0) {
+        customLineItems.push({
+          _id: number,
+          name: name,
+          size: size,
+          quantity: quantity,
+          price: price,
+        });
+      }
+
+      number++;
+    });
+
+    const allNewCustomProductsContainer =
+      document.querySelectorAll(".newcustomproduct");
+    let numberNewProduct = 0;
+    Object.values(allNewCustomProductsContainer).forEach((container) => {
+      if (
+        document.getElementById("customNewProductNameInput" + numberNewProduct)
+      ) {
+        const name = document.getElementById(
+          "customNewProductNameInput" + numberNewProduct
+        ).value;
+        const price = document.getElementById(
+          "customNewProductPriceInput" + numberNewProduct
+        ).value;
+        const size = document.getElementById(
+          "customNewProductDescriptionInput" + numberNewProduct
+        ).value;
+        const quantity = document.getElementById(
+          "customNewProductQuantityInput" + numberNewProduct
+        ).value;
+
+        if (quantity > 0) {
+          customLineItems.push({
+            _id: "1000" + numberNewProduct,
+            name: name,
+            price: price,
+            quantity: quantity,
+            size: size,
+          });
+        }
+      }
+      numberNewProduct++;
+    });
 
     // json du mail
     var mailJson = {
@@ -913,6 +1122,7 @@ function updateRequest(data) {
       },
       status: 5,
       lineItems,
+      customLineItems,
       designImageData: designImageData ? designImageData : "same",
       orderNumber: document.getElementById("inputOrderNumber").value,
       refusalReason: document.getElementById("inputRefusalReason").value,
