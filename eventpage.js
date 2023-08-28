@@ -9,6 +9,9 @@ let apiUrl = currentUrl.includes("webflow")
 const HeadingEvent = document.getElementById("HeadingEvent");
 const eventCode = document.getElementById("eventCode");
 const eventIllustration = document.getElementById("eventIllustration");
+const eventDescriptionIllustration = document.getElementById(
+  "eventDescriptionIllustration"
+);
 const eventDescription = document.getElementById("eventDescription");
 const eventDateDebut = document.getElementById("eventDateDebut");
 const eventDateFin = document.getElementById("eventDateFin");
@@ -57,6 +60,9 @@ const PopUpEventEmail = document.getElementById("PopUpEventEmail");
 const PopUpEventPhone = document.getElementById("PopUpEventPhone");
 const PopUpEventOrderLimit = document.getElementById("PopUpEventOrderLimit");
 const PopUpIllustration = document.getElementById("PopUpIllustration");
+const PopUpDescriptionIllustration = document.getElementById(
+  "PopUpDescriptionIllustration"
+);
 const PopUpExampleProducts = document.getElementById("PopUpExampleProducts");
 const PopUpEventFurnitureOption = document.getElementById(
   "PopUpEventFurnitureOption"
@@ -83,6 +89,24 @@ fieldset.appendChild(scrollableFieldsetDiv);
 fieldset.appendChild(legend);
 PopUpIllustration.appendChild(fieldset);
 
+// création du select d'image de description de l'evenement
+const fieldsetDescIllu = document.createElement("fieldset");
+fieldsetDescIllu.setAttribute("id", "DescriptionIllustrationSelect");
+fieldsetDescIllu.style.marginBottom = "10px";
+const legendDescIllu = document.createElement("legend");
+legendDescIllu.innerHTML = "Image de description :";
+const scrollableFieldsetDescIlluDiv = document.createElement("div");
+scrollableFieldsetDescIlluDiv.setAttribute(
+  "id",
+  "radioEventDescriptionIllustrationContainer"
+);
+scrollableFieldsetDescIlluDiv.style.maxHeight = "350px";
+scrollableFieldsetDescIlluDiv.style.overflow = "auto";
+scrollableFieldsetDescIlluDiv.style.marginLeft = "10px";
+fieldsetDescIllu.appendChild(scrollableFieldsetDescIlluDiv);
+fieldsetDescIllu.appendChild(legendDescIllu);
+PopUpDescriptionIllustration.appendChild(fieldsetDescIllu);
+
 // fonction qui récupère toutes les images d'illustration d'evenements
 function getEventIllustrations() {
   let request = new XMLHttpRequest();
@@ -100,6 +124,7 @@ function getEventIllustrations() {
     if (request.status >= 200 && request.status < 400) {
       Object.values(data).forEach((image) => {
         const radioContainer = document.createElement("div");
+        radioContainer.style.margin = "5px 0";
         const radioInput = document.createElement("input");
         radioInput.type = "radio";
         radioInput.name = "eventIllustration";
@@ -115,6 +140,46 @@ function getEventIllustrations() {
 
         document
           .getElementById("radioEventIllustrationContainer")
+          .appendChild(radioContainer);
+      });
+    }
+  };
+  request.send();
+}
+
+// fonction qui récupère toutes les images d'illustration de description d'evenements
+function getEventDescriptionIllustrations() {
+  let request = new XMLHttpRequest();
+
+  // Changer l'endpoint en ajoutant + 'newEndpoint'
+  let url = apiUrl.toString() + "event-description-illustrations";
+
+  request.open("GET", url, true);
+  request.setRequestHeader("ngrok-skip-browser-warning", 1);
+
+  request.onload = function () {
+    let dataBrut = JSON.parse(this.response);
+    let data = dataBrut.eventDescriptionIllustrations;
+
+    if (request.status >= 200 && request.status < 400) {
+      Object.values(data).forEach((image) => {
+        const radioContainer = document.createElement("div");
+        radioContainer.style.margin = "5px 0";
+        const radioInput = document.createElement("input");
+        radioInput.type = "radio";
+        radioInput.name = "eventDescriptionIllustration";
+        radioInput.setAttribute("id", image._id);
+        radioInput.value = image._id;
+        const radioLabel = document.createElement("label");
+        radioLabel.innerHTML = `<img style="width: 150px" src="${image.image}">`;
+        radioLabel.style.display = "inline";
+        radioLabel.style.marginLeft = "5px";
+
+        radioContainer.appendChild(radioInput);
+        radioContainer.appendChild(radioLabel);
+
+        document
+          .getElementById("radioEventDescriptionIllustrationContainer")
           .appendChild(radioContainer);
       });
     }
@@ -222,6 +287,14 @@ function getData() {
             } else {
               eventIllustration.innerHTML = "Illustration par défaut";
             }
+            let descriptionIllustrationId = null;
+            if (event.descriptionIllustration) {
+              descriptionIllustrationId = event.descriptionIllustration._id;
+              eventDescriptionIllustration.innerHTML = `<a href="${event.descriptionIllustration.image}"><img style="width: 150px" src="${event.descriptionIllustration.image}"></a>`;
+            } else {
+              eventDescriptionIllustration.innerHTML =
+                "Illustration par défaut";
+            }
             let exampleProductList = [];
             if (event.productExamples.length !== 0) {
               Object.values(event.productExamples).forEach((product) => {
@@ -289,6 +362,7 @@ function getData() {
                 event.hallOption,
                 event.defaultPaymentMethod,
                 illustrationId,
+                descriptionIllustrationId,
                 event.productExamples
               );
             };
@@ -309,6 +383,7 @@ function getData() {
                 event.hallOption,
                 event.defaultPaymentMethod,
                 illustrationId,
+                descriptionIllustrationId,
                 event.productExamples
               );
             };
@@ -533,6 +608,7 @@ function getProductFromCategoryData(listProducts, excludedProducts) {
 (function () {
   getCatData();
   getEventIllustrations();
+  getEventDescriptionIllustrations();
   getExampleProducts();
 })();
 
@@ -605,6 +681,7 @@ function modifierevent(
   hallOption,
   defaultPaymentMethod,
   illustrationId,
+  descriptionIllustrationId,
   exampleProducts
 ) {
   ExcludedProducts = excludedProducts;
@@ -643,6 +720,17 @@ function modifierevent(
   } else {
     const illustrationsInputs = document.querySelectorAll(
       'input[name="eventIllustration"]'
+    );
+    Object.values(illustrationsInputs).forEach((illu) => {
+      illu.checked = false;
+    });
+  }
+
+  if (descriptionIllustrationId) {
+    document.getElementById(descriptionIllustrationId).checked = true;
+  } else {
+    const illustrationsInputs = document.querySelectorAll(
+      'input[name="eventDescriptionIllustration"]'
     );
     Object.values(illustrationsInputs).forEach((illu) => {
       illu.checked = false;
@@ -744,6 +832,14 @@ function modifierevent(
       ? document.querySelector('input[name="eventIllustration"]:checked').value
       : null;
 
+    const DescriptionillustrationId = document.querySelector(
+      'input[name="eventDescriptionIllustration"]:checked'
+    )
+      ? document.querySelector(
+          'input[name="eventDescriptionIllustration"]:checked'
+        ).value
+      : null;
+
     if (!isEmailValid) return;
 
     // json avec le contenu à envoyer en post
@@ -769,6 +865,7 @@ function modifierevent(
         defaultPaymentMethod: PopUpDefaultPaymentMethod.value,
         productExamples: productExamplesArray,
         illustration: illustrationId,
+        descriptionIllustration: DescriptionillustrationId,
       },
     };
 
@@ -822,6 +919,7 @@ function dupliquerevent(
   hallOption,
   defaultPaymentMethod,
   illustrationId,
+  descriptionIllustrationId,
   exampleProducts
 ) {
   ExcludedProducts = excludedProducts;
@@ -860,6 +958,17 @@ function dupliquerevent(
   } else {
     const illustrationsInputs = document.querySelectorAll(
       'input[name="eventIllustration"]'
+    );
+    Object.values(illustrationsInputs).forEach((illu) => {
+      illu.checked = false;
+    });
+  }
+
+  if (descriptionIllustrationId) {
+    document.getElementById(descriptionIllustrationId).checked = true;
+  } else {
+    const illustrationsInputs = document.querySelectorAll(
+      'input[name="eventDescriptionIllustration"]'
     );
     Object.values(illustrationsInputs).forEach((illu) => {
       illu.checked = false;
@@ -937,6 +1046,14 @@ function dupliquerevent(
       ? document.querySelector('input[name="eventIllustration"]:checked').value
       : null;
 
+    const descriptionIllustrationId = document.querySelector(
+      'input[name="eventDescriptionIllustration"]:checked'
+    )
+      ? document.querySelector(
+          'input[name="eventDescriptionIllustration"]:checked'
+        ).value
+      : null;
+
     const json = {
       event: {
         name: PopUpEventName.value,
@@ -959,6 +1076,7 @@ function dupliquerevent(
         defaultPaymentMethod: PopUpDefaultPaymentMethod.value,
         productExamples: productExamplesArray,
         illustration: illustrationId,
+        descriptionIllustration: descriptionIllustrationId,
       },
     };
 

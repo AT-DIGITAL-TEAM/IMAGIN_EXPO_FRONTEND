@@ -16,6 +16,9 @@ const EventDescriptionContent = document.getElementById(
 const EventIllustrationContainer = document.getElementById(
   "eventIllustrationContainer"
 );
+const EventDescriptionImageContainer = document.getElementById(
+  "EventDescriptionImageContainer"
+);
 const ExampleProductsListContainer = document.getElementById(
   "ExampleProductsContainer"
 );
@@ -183,6 +186,9 @@ function getEventData() {
 
       if (data.illustration)
         EventIllustrationContainer.innerHTML = `<img style="width: 100%" src="${data.illustration.image}">`;
+
+      if (data.descriptionIllustration)
+        EventDescriptionImageContainer.innerHTML = `<img style="width: 100%" src="${data.descriptionIllustration.image}">`;
 
       if (data.productExamples.length !== 0) {
         Object.values(data.productExamples).forEach((product) => {
