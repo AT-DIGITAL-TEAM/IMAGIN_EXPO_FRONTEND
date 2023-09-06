@@ -1,9 +1,9 @@
 let currentUrl = window.location.href;
 
 // différencier les liens prod / staging
-let apiUrl = currentUrl.includes("webflow")
+let apiUrl = window.location.href.includes("webflow")
   ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
-  : new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/");
+  : new URL("https://api.imaginexpo.com/api/v1/");
 
 // Recuperation des containers où mettre les infos détaillées de l'event
 const HeadingEvent = document.getElementById("HeadingEvent");
@@ -862,7 +862,8 @@ function modifierevent(
         phoneNumber: PopUpEventPhone.value,
         furnitureOption: PopUpEventFurnitureOption.checked,
         hallOption: PopUpEventHallOption.checked,
-        defaultPaymentMethod: PopUpDefaultPaymentMethod.value,
+        defaultPaymentMethod:
+          PopUpDefaultPaymentMethod.value === "other" ? "other" : "online",
         productExamples: productExamplesArray,
         illustration: illustrationId,
         descriptionIllustration: DescriptionillustrationId,
@@ -1231,7 +1232,8 @@ AddEventButton.onclick = function (e) {
       phoneNumber: PopUpEventPhone.value,
       hallOption: PopUpEventHallOption.checked ? true : false,
       furnitureOption: PopUpEventFurnitureOption.checked ? true : false,
-      defaultPaymentMethod: PopUpDefaultPaymentMethod.value,
+      defaultPaymentMethod:
+        PopUpDefaultPaymentMethod.value === "other" ? "other" : "online",
       productExamples: productExamplesArray,
       illustration: illustrationId,
     },

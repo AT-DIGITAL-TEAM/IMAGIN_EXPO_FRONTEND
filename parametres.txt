@@ -1,6 +1,7 @@
-let apiUrl = new URL(
-  "https://imagin-expo-backend-api.int.at-digital.fr/api/v1/"
-);
+// différencier les liens prod / staging
+let apiUrl = window.location.href.includes("webflow")
+  ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
+  : new URL("https://api.imaginexpo.com/api/v1/");
 
 const ProductOptions = [];
 

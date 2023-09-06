@@ -1,6 +1,7 @@
-let apiUrl = new URL(
-  "https://imagin-expo-backend-api.int.at-digital.fr/api/v1/"
-);
+// différencier les liens prod / staging
+let apiUrl = window.location.href.includes("webflow")
+  ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
+  : new URL("https://api.imaginexpo.com/api/v1/");
 
 // Récupération des emplacements ou seront affiché les infos liées à l'event-request
 
@@ -617,7 +618,7 @@ function sendMail(requestState, requestData) {
         " de " +
         requestData.client.companyName,
       text:
-        "Le client a validé la demande : https://imagin-expo-df9765.webflow.io/admin/admin-detail-demande#" +
+        "Le client a validé la demande : https://imaginexpo.com/ie-admin/admin-detail-demande#" +
         requestData._id,
     };
 
@@ -632,7 +633,7 @@ function sendMail(requestState, requestData) {
           " de " +
           requestData.client.companyName,
         text:
-          "Le client a annulé la demande : https://imagin-expo-df9765.webflow.io/admin/admin-detail-demande#" +
+          "Le client a annulé la demande : https://imaginexpo.com/ie-admin/admin-detail-demande#" +
           requestData._id,
       };
     }

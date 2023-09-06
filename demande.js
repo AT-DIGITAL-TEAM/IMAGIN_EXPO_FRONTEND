@@ -1,6 +1,7 @@
-let apiUrl = new URL(
-  "https://imagin-expo-backend-api.int.at-digital.fr/api/v1/"
-);
+// différencier les liens prod / staging
+let apiUrl = window.location.href.includes("webflow")
+  ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
+  : new URL("https://api.imaginexpo.com/api/v1/");
 
 // variables qui seront remplies en fonction de l'event sélectionné
 const EventCategories = [];
@@ -590,7 +591,7 @@ function sendRequestRecapMail(response) {
   const json = {
     to: response.eventRequest.client.email,
     text:
-      "Voici votre récapitulatif de demande de stand chez IMAGIN'EXPO : https://imagin-expo-df9765.webflow.io/recapitulatif-demande-de-stand#" +
+      "Voici votre récapitulatif de demande de stand chez IMAGIN'EXPO : https://imaginexpo.com/recapitulatif-demande-de-stand#" +
       response.eventRequest._id,
     subject: "[IMAGIN'EXPO] Récapitulatif de stand",
   };
@@ -625,7 +626,7 @@ function sendRequestMailToAdmins(response) {
     const json = {
       to: admin,
       text:
-        "Une nouvelle demande de stand IMAGIN'EXPO est disponible : https://imagin-expo-df9765.webflow.io/admin/admin-detail-demande#" +
+        "Une nouvelle demande de stand IMAGIN'EXPO est disponible : https://imaginexpo.com/ie-admin/admin-detail-demande#" +
         response.eventRequest._id,
       subject: "Nouvelle demande de stand",
     };

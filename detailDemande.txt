@@ -1,6 +1,7 @@
-let apiUrl = new URL(
-  "https://imagin-expo-backend-api.int.at-digital.fr/api/v1/"
-);
+// différencier les liens prod / staging
+let apiUrl = window.location.href.includes("webflow")
+  ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
+  : new URL("https://api.imaginexpo.com/api/v1/");
 
 // Récupération des emplacements ou seront affiché les infos liées à l'event-request
 
@@ -710,7 +711,7 @@ function deleteRequest(requestName, idRequest) {
     // revient à la page des demandes après un cours délai
     setTimeout(function () {
       window.location.replace(
-        "https://imagin-expo-df9765.webflow.io/admin/admin-demandes"
+        "https://imaginexpo.com/ie-admin/admin-demandes"
       );
     }, 1000);
   };
@@ -1091,7 +1092,7 @@ function updateRequest(data) {
       to: document.getElementById("inputClientEmail").value,
       subject: "[IMAGIN'EXPO] Votre demande de stand chez Imagin'Expo",
       text:
-        "Des modifications ont été faites sur votre demande de stand : https://imagin-expo-df9765.webflow.io/recapitulatif-demande-de-stand#" +
+        "Des modifications ont été faites sur votre demande de stand : https://imaginexpo.com/recapitulatif-demande-de-stand#" +
         data._id,
     };
 
@@ -1173,7 +1174,7 @@ function updateRequest(data) {
       mailJson = {
         ...mailJson,
         text:
-          "Refus de votre demande de stand : https://imagin-expo-df9765.webflow.io/recapitulatif-demande-de-stand#" +
+          "Refus de votre demande de stand : https://imaginexpo.com/recapitulatif-demande-de-stand#" +
           data._id,
       };
     } else if (
@@ -1204,7 +1205,7 @@ function updateRequest(data) {
       mailJson = {
         ...mailJson,
         text:
-          "Votre demande de stand à été confirmée : https://imagin-expo-df9765.webflow.io/recapitulatif-demande-de-stand#" +
+          "Votre demande de stand à été confirmée : https://imaginexpo.com/recapitulatif-demande-de-stand#" +
           data._id,
       };
     } else if (document.getElementById("inputRequestState").value === "25") {
@@ -1218,7 +1219,7 @@ function updateRequest(data) {
       mailJson = {
         ...mailJson,
         text:
-          "Votre demande de stand à été clôturée : https://imagin-expo-df9765.webflow.io/recapitulatif-demande-de-stand#" +
+          "Votre demande de stand à été clôturée : https://imaginexpo.com/recapitulatif-demande-de-stand#" +
           data._id,
       };
     } else {
