@@ -85,7 +85,7 @@ function getData(page) {
             demande.className = "demandestatenouveau";
             break;
           case 5:
-            demande.innerHTML = "En Attente";
+            demande.innerHTML = "En Att. Client";
             demande.className = "demandestateattente";
             break;
           case 15:
@@ -187,7 +187,7 @@ function getDataRequestOver(page) {
             demande.className = "demandestatenouveau";
             break;
           case 5:
-            demande.innerHTML = "En Attente";
+            demande.innerHTML = "En Att. Client";
             demande.className = "demandestateattente";
             break;
           case 15:

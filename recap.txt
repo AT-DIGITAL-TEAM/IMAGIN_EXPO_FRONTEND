@@ -659,6 +659,39 @@ function sendMail(requestState, requestData) {
     // send rquest with JSON payload
     mailxhr.send(JSON.stringify(mailJson));
   });
+
+  // envoie du mail au client pour payer
+  let urlClientRequest = apiUrl + "request-mail/";
+
+  var clientMailJson = {
+    to: requestData.client.email,
+    subject:
+      "[IMAGIN'EXPO] Votre demande de stand chez Imagin'Expo ",
+    text:
+      "Vous venez de valider les modifications apportées à votre stand, vous pouvez maintenant procéder au paiement en bas de cette page : https://imaginexpo.com/recapitulatif-demande-de-stand#" +
+      requestData._id,
+  };
+
+  const clientMailxhr = new XMLHttpRequest();
+
+    // listen for `load` event
+    clientMailxhr.onload = () => {
+      // print JSON response
+      if (clientMailxhr.status >= 200 && clientMailxhr.status < 300) {
+        // parse JSON
+        const response = JSON.parse(clientMailxhr.responseText);
+        console.log(response);
+      }
+    };
+
+    // open request
+    clientMailxhr.open("POST", urlClientRequest);
+
+    // set `Content-Type` header
+    clientMailxhr.setRequestHeader("Content-Type", "application/json");
+
+    // send rquest with JSON payload
+    clientMailxhr.send(JSON.stringify(clientMailJson));
 }
 
 // encodage de l'image chargée

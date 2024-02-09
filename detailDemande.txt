@@ -1119,7 +1119,7 @@ function updateRequest(data) {
           ? true
           : false,
       },
-      status: 5,
+      status: +document.getElementById("inputRequestState").value,
       lineItems,
       customLineItems,
       designImageData: designImageData ? designImageData : "same",
@@ -1203,7 +1203,7 @@ function updateRequest(data) {
       mailJson = {
         ...mailJson,
         text:
-          "Votre demande de stand à été confirmée : https://imaginexpo.com/recapitulatif-demande-de-stand#" +
+          "Votre demande de stand à été confirmée, vous pouvez procéder au paiement en bas de cette page : https://imaginexpo.com/recapitulatif-demande-de-stand#" +
           data._id,
       };
     } else if (document.getElementById("inputRequestState").value === "25") {
@@ -1226,8 +1226,19 @@ function updateRequest(data) {
       };
     }
 
-    refreshIfNotUpdated(data, eventRequest);
-    return;
+    let isAnyDataUpdated = isAnyDataUpdatedCheck(data, eventRequest);
+    if (!isAnyDataUpdated) {
+      location.reload();
+      return;
+    } 
+
+    json = {
+      eventRequest: {
+        ...eventRequest,
+        status: 5,
+      }
+    };
+
 
     let urlRequest = apiUrl + "event-requests/" + data._id;
 
@@ -1320,24 +1331,27 @@ function strToDate(dtStr) {
   ));
 }
 
-function refreshIfNotUpdated(previousData, updatedData) {
+function isAnyDataUpdatedCheck(previousData, updatedData) {
   const isPaidTrue = updatedData.isPaid === "true";
   const isPaymentOnlineTrue = updatedData.paymentOnline === "true";
-  console.log(previousData.status === updatedData.status,
-    previousData.standNumber === updatedData.standNumber,
-    previousData.refusalReason === updatedData.refusalReason,
-    previousData.paymentOnline === isPaymentOnlineTrue,
-    previousData.paymentMethod === updatedData.paymentMethod,
-    previousData.orderNumber === updatedData.orderNumber,
-    previousData.lineItems === updatedData.lineItems,
-    previousData.isPaid === isPaidTrue,
-    previousData.hall === updatedData.hall,
-    previousData.furniture === updatedData.furniture,
-    updatedData.designImageData === "same",
-    previousData.customLineItems === updatedData.customLineItems,
-    previousData.comment === updatedData.comment,
-    previousData.client === updatedData.client)
-  console.log("details", previousData, updatedData);
+
+  let isLineItemsEqual = true;
+  previousData.lineItems.map((item, index) => {
+    if ((item.quantity !== +updatedData.lineItems[index].quantity) || (item.product._id !== updatedData.lineItems[index].product)) {
+      isLineItemsEqual = false;
+    }
+  })
+
+  let isCustomLineItemsEqual = true;
+  previousData.customLineItems.map((item, index) => {
+    if ((item.name !== updatedData.customLineItems[index].name) || 
+    (item.price !== +updatedData.customLineItems[index].price) ||
+    (item.quantity !== +updatedData.customLineItems[index].quantity) || 
+    (item.size !== updatedData.customLineItems[index].size) ) {
+      isCustomLineItemsEqual = false;
+    }
+  })
+
   if (
     previousData.status === updatedData.status &&
     previousData.standNumber === updatedData.standNumber &&
@@ -1345,16 +1359,27 @@ function refreshIfNotUpdated(previousData, updatedData) {
     previousData.paymentOnline === isPaymentOnlineTrue &&
     previousData.paymentMethod === updatedData.paymentMethod &&
     previousData.orderNumber === updatedData.orderNumber &&
-    previousData.lineItems === updatedData.lineItems &&
+    previousData.lineItems.length === updatedData.lineItems.length &&
+    isLineItemsEqual && 
     previousData.isPaid === isPaidTrue &&
     previousData.hall === updatedData.hall &&
     previousData.furniture === updatedData.furniture &&
     updatedData.designImageData === "same" &&
-    previousData.customLineItems === updatedData.customLineItems &&
+    previousData.customLineItems.length === updatedData.customLineItems.length &&
+    isCustomLineItemsEqual &&
     previousData.comment === updatedData.comment &&
-    previousData.client === updatedData.client
+    previousData.client.address.formattedAddress === updatedData.client.address.formattedAddress &&
+    previousData.client.billingAddress === updatedData.client.billingAddress &&
+    previousData.client.civility === +updatedData.client.civility &&
+    previousData.client.companyName === updatedData.client.companyName &&
+    previousData.client.email === updatedData.client.email &&
+    previousData.client.firstName === updatedData.client.firstName &&
+    previousData.client.isSubjectToTVA === updatedData.client.isSubjectToTVA &&
+    previousData.client.lastName === updatedData.client.lastName &&
+    previousData.client.numTVA === updatedData.client.numTVA &&
+    previousData.client.phone === updatedData.client.phone 
   ) {
-    // location.reload();
-    console.log("reload now")
+    return false;
   }
+  return true;
 }
