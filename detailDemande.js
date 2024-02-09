@@ -371,23 +371,23 @@ function extractData(data) {
       data.event.name ? data.event.name : "?",
       data.createdAt
         ? Intl.DateTimeFormat("fr-FR", {
-            dateStyle: "short",
-            timeStyle: "short",
-          }).format(new Date(data.createdAt))
+          dateStyle: "short",
+          timeStyle: "short",
+        }).format(new Date(data.createdAt))
         : "?",
       data.updatedAt
         ? Intl.DateTimeFormat("fr-FR", {
-            dateStyle: "short",
-            timeStyle: "short",
-          }).format(new Date(data.updatedAt))
+          dateStyle: "short",
+          timeStyle: "short",
+        }).format(new Date(data.updatedAt))
         : "?",
       data.designUrl ? data.designUrl : "Pas de plan",
       data.refusalReason ? data.refusalReason : "Pas de raison specifiée",
       data.cancelledAt
         ? Intl.DateTimeFormat("fr-FR", {
-            dateStyle: "short",
-            timeStyle: "short",
-          }).format(new Date(data.cancelledAt))
+          dateStyle: "short",
+          timeStyle: "short",
+        }).format(new Date(data.cancelledAt))
         : "Pas annulé",
       data.comment ? data.comment : "",
       data.furniture ? "oui" : "non",
@@ -520,9 +520,9 @@ function displayAllData(data) {
   paymentMethod.innerHTML = data.paymentMethod ? data.paymentMethod : "Ø";
   paymentDate.innerHTML = data.paymentDate
     ? Intl.DateTimeFormat("fr-FR", {
-        dateStyle: "short",
-        timeStyle: "short",
-      }).format(new Date(data.paymentDate))
+      dateStyle: "short",
+      timeStyle: "short",
+    }).format(new Date(data.paymentDate))
     : "Ø";
   totalHT.innerHTML = Intl.NumberFormat("fr-FR", {
     style: "currency",
@@ -763,7 +763,7 @@ function updateRequest(data) {
       StandImage.type === "application/pdf" ||
       StandImage.type === "application/msword" ||
       StandImage.type ===
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ) {
       console.log("bon format");
       proccessData(StandImage);
@@ -848,17 +848,17 @@ function updateRequest(data) {
 
   document.getElementById("inputPaymentOnline")
     ? (document.getElementById("inputPaymentOnline").onchange = () => {
-        if (document.getElementById("inputPaymentOnline").value === "true") {
-          paymentMethodComponent.style.display = "none";
-          paymentMethod.innerHTML = "";
-        } else {
-          paymentMethodComponent.style.display = "block";
-          paymentMethod.innerHTML =
-            '<input id="inputPaymentMethod" value="' +
-            data.paymentMethod +
-            '">';
-        }
-      })
+      if (document.getElementById("inputPaymentOnline").value === "true") {
+        paymentMethodComponent.style.display = "none";
+        paymentMethod.innerHTML = "";
+      } else {
+        paymentMethodComponent.style.display = "block";
+        paymentMethod.innerHTML =
+          '<input id="inputPaymentMethod" value="' +
+          data.paymentMethod +
+          '">';
+      }
+    })
     : null;
 
   // infos items
@@ -1226,6 +1226,9 @@ function updateRequest(data) {
       };
     }
 
+    refreshIfNotUpdated(data, eventRequest);
+    return;
+
     let urlRequest = apiUrl + "event-requests/" + data._id;
 
     const xhr = new XMLHttpRequest();
@@ -1315,4 +1318,43 @@ function strToDate(dtStr) {
     timeParts[0],
     timeParts[1]
   ));
+}
+
+function refreshIfNotUpdated(previousData, updatedData) {
+  const isPaidTrue = updatedData.isPaid === "true";
+  const isPaymentOnlineTrue = updatedData.paymentOnline === "true";
+  console.log(previousData.status === updatedData.status,
+    previousData.standNumber === updatedData.standNumber,
+    previousData.refusalReason === updatedData.refusalReason,
+    previousData.paymentOnline === isPaymentOnlineTrue,
+    previousData.paymentMethod === updatedData.paymentMethod,
+    previousData.orderNumber === updatedData.orderNumber,
+    previousData.lineItems === updatedData.lineItems,
+    previousData.isPaid === isPaidTrue,
+    previousData.hall === updatedData.hall,
+    previousData.furniture === updatedData.furniture,
+    updatedData.designImageData === "same",
+    previousData.customLineItems === updatedData.customLineItems,
+    previousData.comment === updatedData.comment,
+    previousData.client === updatedData.client)
+  console.log("details", previousData, updatedData);
+  if (
+    previousData.status === updatedData.status &&
+    previousData.standNumber === updatedData.standNumber &&
+    previousData.refusalReason === updatedData.refusalReason &&
+    previousData.paymentOnline === isPaymentOnlineTrue &&
+    previousData.paymentMethod === updatedData.paymentMethod &&
+    previousData.orderNumber === updatedData.orderNumber &&
+    previousData.lineItems === updatedData.lineItems &&
+    previousData.isPaid === isPaidTrue &&
+    previousData.hall === updatedData.hall &&
+    previousData.furniture === updatedData.furniture &&
+    updatedData.designImageData === "same" &&
+    previousData.customLineItems === updatedData.customLineItems &&
+    previousData.comment === updatedData.comment &&
+    previousData.client === updatedData.client
+  ) {
+    // location.reload();
+    console.log("reload now")
+  }
 }
