@@ -1230,14 +1230,16 @@ function updateRequest(data) {
     if (!isAnyDataUpdated) {
       location.reload();
       return;
-    } 
+    }
 
-    json = {
-      eventRequest: {
-        ...eventRequest,
-        status: 5,
-      }
-    };
+    if (eventRequest.status === data.status) {
+      json = {
+        eventRequest: {
+          ...eventRequest,
+          status: 5,
+        }
+      };
+    }
 
 
     let urlRequest = apiUrl + "event-requests/" + data._id;
@@ -1344,10 +1346,10 @@ function isAnyDataUpdatedCheck(previousData, updatedData) {
 
   let isCustomLineItemsEqual = true;
   previousData.customLineItems.map((item, index) => {
-    if ((item.name !== updatedData.customLineItems[index].name) || 
-    (item.price !== +updatedData.customLineItems[index].price) ||
-    (item.quantity !== +updatedData.customLineItems[index].quantity) || 
-    (item.size !== updatedData.customLineItems[index].size) ) {
+    if ((item.name !== updatedData.customLineItems[index].name) ||
+      (item.price !== +updatedData.customLineItems[index].price) ||
+      (item.quantity !== +updatedData.customLineItems[index].quantity) ||
+      (item.size !== updatedData.customLineItems[index].size)) {
       isCustomLineItemsEqual = false;
     }
   })
@@ -1360,7 +1362,7 @@ function isAnyDataUpdatedCheck(previousData, updatedData) {
     previousData.paymentMethod === updatedData.paymentMethod &&
     previousData.orderNumber === updatedData.orderNumber &&
     previousData.lineItems.length === updatedData.lineItems.length &&
-    isLineItemsEqual && 
+    isLineItemsEqual &&
     previousData.isPaid === isPaidTrue &&
     previousData.hall === updatedData.hall &&
     previousData.furniture === updatedData.furniture &&
@@ -1377,7 +1379,7 @@ function isAnyDataUpdatedCheck(previousData, updatedData) {
     previousData.client.isSubjectToTVA === updatedData.client.isSubjectToTVA &&
     previousData.client.lastName === updatedData.client.lastName &&
     previousData.client.numTVA === updatedData.client.numTVA &&
-    previousData.client.phone === updatedData.client.phone 
+    previousData.client.phone === updatedData.client.phone
   ) {
     return false;
   }
