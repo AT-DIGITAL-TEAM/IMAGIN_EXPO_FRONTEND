@@ -85,7 +85,7 @@ fileUploadInput.onchange = function () {
     StandImage.type === "application/pdf" ||
     StandImage.type === "application/msword" ||
     StandImage.type ===
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
   ) {
     console.log("bon format");
     fileUploadErrorMsg.style.display = "none";
@@ -221,9 +221,9 @@ function getEventData() {
       } else {
         englishMode
           ? (ExampleProductsListContainer.innerHTML =
-              "No product examples available...")
+            "No product examples available...")
           : (ExampleProductsListContainer.innerHTML =
-              "Pas d'exemples de produits disponibles...");
+            "Pas d'exemples de produits disponibles...");
       }
 
       // lister les produits exclus
@@ -410,14 +410,19 @@ async function updateEventRequest(categoryId, productId, qty) {
 
   // vérification de si le produits est pas déjà présent dans la variable lineItems
   if (isItemAlreadySelected) {
-    lineItems = lineItems.map((item) => {
-      if (item.uniqueId === uniqueId) {
-        item.quantity = quantity;
-      }
+    if (quantity < 1) {
+      lineItems = lineItems.filter((item) => item.uniqueId !== uniqueId);
+    } else {
+      lineItems = lineItems.map((item) => {
+        if (item.uniqueId === uniqueId) {
+          item.quantity = quantity;
+        }
 
-      return item;
-    });
+        return item;
+      });
+    }
   } else {
+    if (quantity < 1) return;
     lineItems.push({
       uniqueId,
       product: productId,
@@ -492,9 +497,9 @@ ButtonSendRequest.onclick = function (event) {
     document.getElementById("ErrorSentForm").style.display = "block";
     englishMode
       ? (document.getElementById("ErrorSentForm").innerHTML =
-          "A field is empty")
+        "A field is empty")
       : (document.getElementById("ErrorSentForm").innerHTML =
-          "Un champ est vide");
+        "Un champ est vide");
     return;
   }
 
@@ -503,9 +508,9 @@ ButtonSendRequest.onclick = function (event) {
     document.getElementById("ErrorSentForm").style.display = "block";
     englishMode
       ? (document.getElementById("ErrorSentForm").innerHTML =
-          "VAT number is incorrect")
+        "VAT number is incorrect")
       : (document.getElementById("ErrorSentForm").innerHTML =
-          "Le numéro de TVA n'est pas bon");
+        "Le numéro de TVA n'est pas bon");
     return;
   }
 
@@ -569,9 +574,9 @@ ButtonSendRequest.onclick = function (event) {
       document.getElementById("ErrorSentForm").style.display = "block";
       englishMode
         ? (document.getElementById("ErrorSentForm").innerHTML =
-            "Incorrect e-mail addresses or phone number")
+          "Incorrect e-mail addresses or phone number")
         : (document.getElementById("ErrorSentForm").innerHTML =
-            "Les addresses mail ou le numéro de téléphone sont incorrects");
+          "Les addresses mail ou le numéro de téléphone sont incorrects");
     }
   };
 
@@ -662,11 +667,15 @@ const getInfoClientContainer = document.getElementById(
 );
 const NextStepButton = document.getElementById("NextStepButton");
 const errorRequestFirstPart = document.getElementById("errorRequestFirstPart");
+const errorRequestNoItem = document.getElementById("errorRequestNoItem");
 NextStepButton.onclick = function () {
   if (RequestStandNumber.value === "") {
     errorRequestFirstPart.style.display = "block";
+  } else if (lineItems.length < 1) {
+    errorRequestNoItem.style.display = "block";
   } else {
     getInfoClientContainer.style.display = "block";
     errorRequestFirstPart.style.display = "none";
+    errorRequestNoItem.style.display = "none";
   }
 };

@@ -995,7 +995,7 @@ function updateRequest(data) {
     var verificationMultipleItems = [];
     var isMultiple = false;
     Object.values(itemInfos).forEach((item) => {
-      if (item.value !== 0) {
+      if (item.value > 0) {
         // mettre les infos dans des objets à envoyer ensuite a lineItems
         if (verificationMultipleItems.indexOf(item.id) > -1) {
           isMultiple = true;
@@ -1227,17 +1227,24 @@ function updateRequest(data) {
     }
 
     let isAnyDataUpdated = isAnyDataUpdatedCheck(data, eventRequest);
-    if (!isAnyDataUpdated) {
+    if (!isAnyDataUpdated && eventRequest.status === data.status) {
       location.reload();
       return;
     }
 
-    if (eventRequest.status === data.status) {
+    if (isAnyDataUpdated) {
       json = {
         eventRequest: {
           ...eventRequest,
           status: 5,
         }
+      };
+
+      mailJson = {
+        ...mailJson,
+        text:
+          "Des modifications ont été faites sur votre demande de stand : https://imaginexpo.com/recapitulatif-demande-de-stand#" +
+          data._id,
       };
     }
 
@@ -1339,23 +1346,23 @@ function isAnyDataUpdatedCheck(previousData, updatedData) {
 
   let isLineItemsEqual = true;
   previousData.lineItems.map((item, index) => {
-    if ((item.quantity !== +updatedData.lineItems[index].quantity) || (item.product._id !== updatedData.lineItems[index].product)) {
+    if ((item.quantity !== +updatedData.lineItems[index]?.quantity) || (item.product._id !== updatedData.lineItems[index]?.product)) {
       isLineItemsEqual = false;
     }
   })
 
   let isCustomLineItemsEqual = true;
   previousData.customLineItems.map((item, index) => {
-    if ((item.name !== updatedData.customLineItems[index].name) ||
-      (item.price !== +updatedData.customLineItems[index].price) ||
-      (item.quantity !== +updatedData.customLineItems[index].quantity) ||
-      (item.size !== updatedData.customLineItems[index].size)) {
+    if ((item.name !== updatedData.customLineItems[index]?.name) ||
+      (item.price !== +updatedData.customLineItems[index]?.price) ||
+      (item.quantity !== +updatedData.customLineItems[index]?.quantity) ||
+      (item.size !== updatedData.customLineItems[index]?.size)) {
       isCustomLineItemsEqual = false;
     }
   })
 
   if (
-    previousData.status === updatedData.status &&
+    // previousData.status === updatedData.status &&
     previousData.standNumber === updatedData.standNumber &&
     previousData.refusalReason === updatedData.refusalReason &&
     previousData.paymentOnline === isPaymentOnlineTrue &&
