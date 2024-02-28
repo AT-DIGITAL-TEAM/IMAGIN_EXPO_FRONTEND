@@ -345,7 +345,8 @@ function getCatData() {
                 updateEventRequest(
                   category._id,
                   product._id,
-                  NumberInput.value
+                  NumberInput.value,
+                  product.price.amount
                 );
                 // modification du prix en fonction de la nouvelle valeur
                 updatePrice(NumberInput.value);
@@ -400,7 +401,7 @@ function getCatData() {
 }
 
 // Mise à jour de la variable des infos des produits qui seront envoyé à la bdd
-async function updateEventRequest(categoryId, productId, qty) {
+async function updateEventRequest(categoryId, productId, qty, price) {
   const uniqueId = `${categoryId}-${productId}`;
 
   const isItemAlreadySelected = lineItems.find(
@@ -427,21 +428,18 @@ async function updateEventRequest(categoryId, productId, qty) {
       uniqueId,
       product: productId,
       quantity: quantity,
+      price,
     });
   }
 }
 
 // fonction permettant d'afficher les prix de la requette entière en fonction des produits et de leur quantité
 function calculateTotal() {
-  var allTotalPrices = document.querySelectorAll(".totalprices");
-
   var globalTotalPrice = 0;
 
-  for (var i = 0; i < allTotalPrices.length; i++) {
-    globalTotalPrice += parseInt(
-      allTotalPrices[i].textContent.replace(" €", "")
-    );
-  }
+  lineItems.map(item => {
+    globalTotalPrice += item.price * item.quantity;
+  })
 
   let TVA = globalTotalPrice * 0.2;
   if (!TVACheckBox.checked) TVA = 0;
@@ -592,7 +590,6 @@ ButtonSendRequest.onclick = function (event) {
 
 // fonction d'envoie du mail de récapitulatif
 function sendRequestRecapMail(response) {
-  console.log(response.eventRequest.client.email, response.eventRequest._id);
   const json = {
     to: response.eventRequest.client.email,
     text:
