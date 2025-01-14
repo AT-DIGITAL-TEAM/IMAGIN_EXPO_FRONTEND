@@ -85,7 +85,7 @@ fileUploadInput.onchange = function () {
     StandImage.type === "application/pdf" ||
     StandImage.type === "application/msword" ||
     StandImage.type ===
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
   ) {
     console.log("bon format");
     fileUploadErrorMsg.style.display = "none";
@@ -221,9 +221,9 @@ function getEventData() {
       } else {
         englishMode
           ? (ExampleProductsListContainer.innerHTML =
-            "No product examples available...")
+              "No product examples available...")
           : (ExampleProductsListContainer.innerHTML =
-            "Pas d'exemples de produits disponibles...");
+              "Pas d'exemples de produits disponibles...");
       }
 
       // lister les produits exclus
@@ -437,9 +437,9 @@ async function updateEventRequest(categoryId, productId, qty, price) {
 function calculateTotal() {
   var globalTotalPrice = 0;
 
-  lineItems.map(item => {
+  lineItems.map((item) => {
     globalTotalPrice += item.price * item.quantity;
-  })
+  });
 
   let TVA = globalTotalPrice * 0.2;
   if (!TVACheckBox.checked) TVA = 0;
@@ -495,20 +495,20 @@ ButtonSendRequest.onclick = function (event) {
     document.getElementById("ErrorSentForm").style.display = "block";
     englishMode
       ? (document.getElementById("ErrorSentForm").innerHTML =
-        "A field is empty")
+          "A field is empty")
       : (document.getElementById("ErrorSentForm").innerHTML =
-        "Un champ est vide");
+          "Un champ est vide");
     return;
   }
 
-  const RegexTVA = /^[A-Za-z]{2}\d{8,12}$/;
+  const RegexTVA = /^[a-zA-Z0-9\s]{9,20}$/;
   if (!RegexTVA.test(ClientNumTVA.value)) {
     document.getElementById("ErrorSentForm").style.display = "block";
     englishMode
       ? (document.getElementById("ErrorSentForm").innerHTML =
-        "VAT number is incorrect")
+          "VAT number is incorrect")
       : (document.getElementById("ErrorSentForm").innerHTML =
-        "Le numéro de TVA n'est pas bon");
+          "Le numéro de TVA n'est pas bon");
     return;
   }
 
@@ -572,9 +572,9 @@ ButtonSendRequest.onclick = function (event) {
       document.getElementById("ErrorSentForm").style.display = "block";
       englishMode
         ? (document.getElementById("ErrorSentForm").innerHTML =
-          "Incorrect e-mail addresses or phone number")
+            "Incorrect e-mail addresses or phone number")
         : (document.getElementById("ErrorSentForm").innerHTML =
-          "Les addresses mail ou le numéro de téléphone sont incorrects");
+            "Les addresses mail ou le numéro de téléphone sont incorrects");
     }
   };
 
