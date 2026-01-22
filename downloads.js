@@ -1,6 +1,6 @@
 // différencier les liens prod / staging
 let apiLink = window.location.href.includes("webflow")
-  ? new URL("https://staging-imagin-expo-backend-api.apps.imaginexpo.com")
+  ? new URL("https://staging-imagin-expo-backend-api.apps.imaginexpo.com/api/v1/")
   : new URL("https://api.imaginexpo.com/api/v1/");
 
 const PresentationForm = document.getElementById("dlPresentationForm");

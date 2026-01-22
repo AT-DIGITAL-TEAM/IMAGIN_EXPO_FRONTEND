@@ -1,6 +1,6 @@
 // différencier les liens prod / staging
 let apiUrl = window.location.href.includes("webflow")
-  ? new URL("https://staging-imagin-expo-backend-api.apps.imaginexpo.com")
+  ? new URL("https://staging-imagin-expo-backend-api.apps.imaginexpo.com/api/v1/")
   : new URL("https://api.imaginexpo.com/api/v1/");
 
 const ProductOptions = [];
@@ -728,6 +728,7 @@ let currentProductRequestLength = 0;
 let currentProductPage = 1;
 
 const PageNumberIndicator = document.getElementById("pageNumber");
+PageNumberIndicator.innerHTML = "Page " + currentProductPage;
 
 // récupère et affiche les produits dans la liste
 function getProductData(page) {
@@ -863,7 +864,7 @@ PreviousButton.onclick = function () {
   if (currentProductPage != 1) {
     currentProductPage = currentProductPage - 1;
     PageNumberIndicator.innerHTML = "Page " + currentProductPage;
-    getData("?p=" + currentProductPage);
+    getProductData("?p=" + currentProductPage);
   }
 };
 
