@@ -1,6 +1,6 @@
 // différencier les liens prod / staging
 let apiLink = window.location.href.includes("webflow")
-  ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
+  ? new URL("https://staging-imagin-expo-backend-api.apps.imaginexpo.com")
   : new URL("https://api.imaginexpo.com/api/v1/");
 
 const PresentationForm = document.getElementById("dlPresentationForm");
@@ -45,8 +45,7 @@ function downloadCatalog(event) {
   var link = document.createElement("a");
   link.setAttribute("download", "Catalogue Partenaire Mobilier");
   link.setAttribute("target", "_blank");
-  link.href =
-    "http://pfjr1545.odns.fr/imaginexpo/catalogue-aliance-mobilier.pdf";
+  link.href = "http://pfjr1545.odns.fr/imaginexpo/catalogue-aliance-mobilier.pdf";
   document.body.appendChild(link);
   link.click();
   link.remove();

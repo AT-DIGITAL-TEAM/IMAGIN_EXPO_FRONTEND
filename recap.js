@@ -1,6 +1,6 @@
 // différencier les liens prod / staging
 let apiUrl = window.location.href.includes("webflow")
-  ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
+  ? new URL("https://staging-imagin-expo-backend-api.apps.imaginexpo.com")
   : new URL("https://api.imaginexpo.com/api/v1/");
 
 // Récupération des emplacements ou seront affiché les infos liées à l'event-request
@@ -57,18 +57,12 @@ const PaymentButton = document.getElementById("PaymentButton");
 
 const itemsContainer = document.getElementById("itemsContainer");
 var itemsOfRequest = [];
-const customProductContainer = document.getElementById(
-  "customProductContainer"
-);
+const customProductContainer = document.getElementById("customProductContainer");
 
 // boutons de validation et de refus
 const RefusUpdateButton = document.getElementById("RefusUpdateButton");
-const RefusUpdateButtonToConfirm = document.getElementById(
-  "RefusUpdateButtonToConfirm"
-);
-const ValidationUpdateButton = document.getElementById(
-  "ValidationUpdateButton"
-);
+const RefusUpdateButtonToConfirm = document.getElementById("RefusUpdateButtonToConfirm");
+const ValidationUpdateButton = document.getElementById("ValidationUpdateButton");
 const refusalReasonInput = document.getElementById("refusalReasonInput");
 
 // Pop ups de post-paiement
@@ -83,10 +77,7 @@ function getData() {
 
   let request = new XMLHttpRequest();
 
-  let url =
-    apiUrl.toString() +
-    "event-requests/" +
-    location.hash.replace("#", "").split("/")[0];
+  let url = apiUrl.toString() + "event-requests/" + location.hash.replace("#", "").split("/")[0];
 
   request.open("GET", url, true);
   request.setRequestHeader("ngrok-skip-browser-warning", 1);
@@ -179,16 +170,8 @@ function getTheEventData(Requestdata) {
               // vérification si le produit n'est pas exclus ou déjà dans l'event-request avant de l'afficher dans le select
               if (request.status >= 200 && request.status < 400) {
                 console.log(excludedProductTable);
-                if (
-                  !(excludedProductTable.indexOf(product) > -1) &&
-                  !(itemsOfRequest.indexOf(product) > -1)
-                ) {
-                  const option =
-                    '<option value="' +
-                    product +
-                    '">' +
-                    data.name +
-                    "</option>";
+                if (!(excludedProductTable.indexOf(product) > -1) && !(itemsOfRequest.indexOf(product) > -1)) {
+                  const option = '<option value="' + product + '">' + data.name + "</option>";
                   allOptions += option;
                   console.log(allOptions);
                 }
@@ -218,8 +201,7 @@ function getTheEventData(Requestdata) {
           productDescription.innerHTML = "dimensions...";
           const productQuantity = document.createElement("div");
           productQuantity.className = "text-block-62 itemquantity";
-          productQuantity.innerHTML =
-            '<input class="quantityInput" type="number" value="' + 0 + '">';
+          productQuantity.innerHTML = '<input class="quantityInput" type="number" value="' + 0 + '">';
           productQuantity.setAttribute("id", "item.product._id" + "quantity");
           const productPrice = document.createElement("div");
           productPrice.className = "text-block-62";
@@ -242,15 +224,9 @@ function getTheEventData(Requestdata) {
 
           //fonction qui remet la quantité à 0 lorsque on modifie un product
           function changeInputValue() {
-            const selectedProduct = document.getElementById(
-              "select" + selectIdHere
-            ).value;
+            const selectedProduct = document.getElementById("select" + selectIdHere).value;
             productQuantity.innerHTML =
-              '<input id="' +
-              selectedProduct +
-              'quantityInput" class="quantityInput" type="number" value="' +
-              0 +
-              '">';
+              '<input id="' + selectedProduct + 'quantityInput" class="quantityInput" type="number" value="' + 0 + '">';
             if (!(itemsOfRequest.indexOf(selectedProduct) > -1)) {
               itemsOfRequest.push(selectedProduct);
             }
@@ -285,10 +261,8 @@ function displayAllData(data) {
   ValidationUpdateButton.onclick = () => validateUpdate(data);
   RefusUpdateButton.onclick = () => rejectUpdate(data);
   if (data.isPaid) RefusUpdateButtonToConfirm.style.display = "none";
-  if (location.href.split("/payment=")[1] === "success")
-    paymentLandingSuccess.style.display = "block";
-  if (location.href.split("/payment=")[1] === "cancel")
-    paymentLandingCancel.style.display = "block";
+  if (location.href.split("/payment=")[1] === "success") paymentLandingSuccess.style.display = "block";
+  if (location.href.split("/payment=")[1] === "cancel") paymentLandingCancel.style.display = "block";
 
   // infos générales
   orderNumber.innerHTML = data.orderNumber;
@@ -320,9 +294,7 @@ function displayAllData(data) {
   designImageData = data.designUrl;
   if (data.designUrl !== "") {
     designUrl.innerHTML =
-      "<a class='button retourbutton' href='" +
-      data.designUrl +
-      "' target='_blank'>Voir le plan</a>";
+      "<a class='button retourbutton' href='" + data.designUrl + "' target='_blank'>Voir le plan</a>";
   } else {
     designUrl.innerHTML = "Pas de plan";
   }
@@ -388,12 +360,7 @@ function displayAllData(data) {
   }
 
   // Bouton de paiement
-  if (
-    data.status === 15 &&
-    !data.isPaid &&
-    data.paymentOnline &&
-    data.stripePaymentStatus !== 0
-  ) {
+  if (data.status === 15 && !data.isPaid && data.paymentOnline && data.stripePaymentStatus !== 0) {
     PaymentButton.style.display = "block";
   }
   PaymentButton.onclick = () => {
@@ -436,8 +403,7 @@ function displayAllData(data) {
     productDescription.innerHTML = item.product.description;
     productContainer.appendChild(productDescription);
     const productQuantity = document.createElement("div");
-    productQuantity.className =
-      "text-block-62 itemquantity quantity" + item.product.name;
+    productQuantity.className = "text-block-62 itemquantity quantity" + item.product.name;
     productQuantity.innerHTML = item.quantity;
     productQuantity.setAttribute("id", item.product._id + "quantity");
     productContainer.appendChild(productQuantity);
@@ -452,32 +418,23 @@ function displayAllData(data) {
     // fonction pour supprimer le product de l'affichage
     $(document).on("click", ".delete" + item.product._id, function () {
       console.log("delete item " + item.product._id);
-      const inputNumber = document.getElementById(
-        item.product._id + "quantityInput"
-      );
+      const inputNumber = document.getElementById(item.product._id + "quantityInput");
       inputNumber.value = 0;
-      const ContainerItem = document.getElementById(
-        item.product._id + "container"
-      );
+      const ContainerItem = document.getElementById(item.product._id + "container");
       ContainerItem.style.display = "none";
       console.log(ContainerItem);
-      itemsOfRequest = itemsOfRequest.filter(
-        (itemOfRequest) => itemOfRequest != item.product._id
-      );
+      itemsOfRequest = itemsOfRequest.filter((itemOfRequest) => itemOfRequest != item.product._id);
     });
     productContainer.appendChild(deleteItem);
 
     // const CategoryItemsContainer = document.getElementById(item.product._id);
-    const allCatItemsContainers = document.getElementsByClassName(
-      "productContainer" + item.product._id
-    );
+    const allCatItemsContainers = document.getElementsByClassName("productContainer" + item.product._id);
     // if (CategoryItemsContainer != null) {
     //   CategoryItemsContainer.appendChild(productContainer.cloneNode(true));
     // }
     if (allCatItemsContainers) {
       Object.values(allCatItemsContainers).forEach((catItemContainer) => {
-        if (!catItemContainer.hasChildNodes())
-          catItemContainer.appendChild(productContainer.cloneNode(true));
+        if (!catItemContainer.hasChildNodes()) catItemContainer.appendChild(productContainer.cloneNode(true));
       });
     }
 
@@ -502,8 +459,7 @@ function displayAllData(data) {
     productDescription.setAttribute("id", item._id + "customdescription");
     productContainer.appendChild(productDescription);
     const productQuantity = document.createElement("div");
-    productQuantity.className =
-      "text-block-62 customitemquantity quantity" + item.name;
+    productQuantity.className = "text-block-62 customitemquantity quantity" + item.name;
     productQuantity.innerHTML = item.quantity;
     productQuantity.setAttribute("id", item._id + "customquantity");
     productContainer.appendChild(productQuantity);
@@ -519,9 +475,7 @@ function displayAllData(data) {
     // fonction pour supprimer le product de l'affichage
     $(document).on("click", ".delete" + item._id, function () {
       console.log("delete item " + item.name);
-      const inputNumber = document.getElementById(
-        item._id + "customquantityinput"
-      );
+      const inputNumber = document.getElementById(item._id + "customquantityinput");
       inputNumber.value = 0;
       const ContainerItem = document.getElementById(item._id);
       ContainerItem.style.display = "none";
@@ -571,9 +525,7 @@ function rejectUpdate(data) {
 
   const xhr = new XMLHttpRequest();
 
-  const refusalReason = refusalReasonInput.value
-    ? refusalReasonInput.value
-    : "";
+  const refusalReason = refusalReasonInput.value ? refusalReasonInput.value : "";
 
   // listen for `load` event
   xhr.onload = () => {
@@ -617,9 +569,7 @@ function sendMail(requestState, requestData) {
         requestData.client.lastName +
         " de " +
         requestData.client.companyName,
-      text:
-        "Le client a validé la demande : https://imaginexpo.com/ie-admin/admin-detail-demande#" +
-        requestData._id,
+      text: "Le client a validé la demande : https://imaginexpo.com/ie-admin/admin-detail-demande#" + requestData._id,
     };
 
     if (requestState === 0) {
@@ -632,9 +582,7 @@ function sendMail(requestState, requestData) {
           requestData.client.lastName +
           " de " +
           requestData.client.companyName,
-        text:
-          "Le client a annulé la demande : https://imaginexpo.com/ie-admin/admin-detail-demande#" +
-          requestData._id,
+        text: "Le client a annulé la demande : https://imaginexpo.com/ie-admin/admin-detail-demande#" + requestData._id,
       };
     }
 
@@ -665,8 +613,7 @@ function sendMail(requestState, requestData) {
 
   var clientMailJson = {
     to: requestData.client.email,
-    subject:
-      "[IMAGIN'EXPO] Votre demande de stand chez Imagin'Expo ",
+    subject: "[IMAGIN'EXPO] Votre demande de stand chez Imagin'Expo ",
     text:
       "Vous venez de valider les modifications apportées à votre stand, vous pouvez maintenant procéder au paiement en bas de cette page : https://imaginexpo.com/recapitulatif-demande-de-stand#" +
       requestData._id,
@@ -674,24 +621,24 @@ function sendMail(requestState, requestData) {
 
   const clientMailxhr = new XMLHttpRequest();
 
-    // listen for `load` event
-    clientMailxhr.onload = () => {
-      // print JSON response
-      if (clientMailxhr.status >= 200 && clientMailxhr.status < 300) {
-        // parse JSON
-        const response = JSON.parse(clientMailxhr.responseText);
-        console.log(response);
-      }
-    };
+  // listen for `load` event
+  clientMailxhr.onload = () => {
+    // print JSON response
+    if (clientMailxhr.status >= 200 && clientMailxhr.status < 300) {
+      // parse JSON
+      const response = JSON.parse(clientMailxhr.responseText);
+      console.log(response);
+    }
+  };
 
-    // open request
-    clientMailxhr.open("POST", urlClientRequest);
+  // open request
+  clientMailxhr.open("POST", urlClientRequest);
 
-    // set `Content-Type` header
-    clientMailxhr.setRequestHeader("Content-Type", "application/json");
+  // set `Content-Type` header
+  clientMailxhr.setRequestHeader("Content-Type", "application/json");
 
-    // send rquest with JSON payload
-    clientMailxhr.send(JSON.stringify(clientMailJson));
+  // send rquest with JSON payload
+  clientMailxhr.send(JSON.stringify(clientMailJson));
 }
 
 // encodage de l'image chargée

@@ -1,6 +1,6 @@
 // différencier les liens prod / staging
 let apiUrl = window.location.href.includes("webflow")
-  ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
+  ? new URL("https://staging-imagin-expo-backend-api.apps.imaginexpo.com")
   : new URL("https://api.imaginexpo.com/api/v1/");
 
 // Récupération des emplacements ou seront affiché les infos liées à l'event-request
@@ -15,9 +15,7 @@ const createdAt = document.getElementById("createdAt");
 const updatedAt = document.getElementById("updatedAt");
 const designUrl = document.getElementById("designUrl");
 const refusalReason = document.getElementById("refusalReason");
-const refusalReasonComponent = document.getElementById(
-  "refusalReasonComponent"
-);
+const refusalReasonComponent = document.getElementById("refusalReasonComponent");
 const cancelledAt = document.getElementById("cancelledAt");
 const cancelledAtComponent = document.getElementById("cancelledAtComponent");
 const CancelDateForm = document.getElementById("CancelDateForm");
@@ -49,9 +47,7 @@ const clientNumTVA = document.getElementById("clientNumTVA");
 
 const paymentState = document.getElementById("paymentState");
 const paymentExpirationDate = document.getElementById("paymentExpirationDate");
-const paymentExpirationDateInput = document.getElementById(
-  "paymentExpirationDateInput"
-);
+const paymentExpirationDateInput = document.getElementById("paymentExpirationDateInput");
 paymentExpirationDateInput.classList.remove("w-input");
 const ExpirationDateForm = document.getElementById("ExpirationDateForm");
 const paymentInvoiceUrl = document.getElementById("paymentInvoiceUrl");
@@ -72,54 +68,33 @@ const subjectToTVA = document.getElementById("subjectToTVA");
 
 // paiement components
 
-const paymentMethodComponent = document.getElementById(
-  "paymentMethodComponent"
-);
+const paymentMethodComponent = document.getElementById("paymentMethodComponent");
 const paymentDateComponent = document.getElementById("paymentDateComponent");
-const expirationDateComponent = document.getElementById(
-  "expirationDateComponent"
-);
+const expirationDateComponent = document.getElementById("expirationDateComponent");
 const billingUrlComponent = document.getElementById("billingUrlComponent");
-const paymentMethodIdComponent = document.getElementById(
-  "paymentMethodIdComponent"
-);
-const paymentIntentIdComponent = document.getElementById(
-  "paymentIntentIdComponent"
-);
+const paymentMethodIdComponent = document.getElementById("paymentMethodIdComponent");
+const paymentIntentIdComponent = document.getElementById("paymentIntentIdComponent");
 
 //infos des Items/products
 
 const itemsContainer = document.getElementById("itemsContainer");
 var itemsOfRequest = [];
 const multipleErrorMsg = document.getElementById("multipleErrorMsg");
-const customProductContainer = document.getElementById(
-  "customProductContainer"
-);
+const customProductContainer = document.getElementById("customProductContainer");
 
 //Récupération des boutons
 
-const DetailDemandeUpdateButton = document.getElementById(
-  "DetailDemandeUpdateButton"
-);
-const DetailDemandeDeleteButton = document.getElementById(
-  "DetailDemandeDeleteButton"
-);
-const DetailDemandeBackButton = document.getElementById(
-  "DetailDemandeBackButton"
-);
-const DetailDemandeExtractButton = document.getElementById(
-  "DetailDemandeExtractButton"
-);
-const addCustomProductButton = document.getElementById(
-  "addCustomProductButton"
-);
+const DetailDemandeUpdateButton = document.getElementById("DetailDemandeUpdateButton");
+const DetailDemandeDeleteButton = document.getElementById("DetailDemandeDeleteButton");
+const DetailDemandeBackButton = document.getElementById("DetailDemandeBackButton");
+const DetailDemandeExtractButton = document.getElementById("DetailDemandeExtractButton");
+const addCustomProductButton = document.getElementById("addCustomProductButton");
 
 // Fonction pour récuperer l'event_request ciblé par la page
 function getData() {
   let request = new XMLHttpRequest();
 
-  let url =
-    apiUrl.toString() + "event-requests/" + location.hash.replace("#", "");
+  let url = apiUrl.toString() + "event-requests/" + location.hash.replace("#", "");
 
   request.open("GET", url, true);
   request.setRequestHeader("ngrok-skip-browser-warning", 1);
@@ -210,16 +185,8 @@ function getTheEventData(Requestdata) {
 
               // vérification si le produit n'est pas exclus ou déjà dans l'event-request avant de l'afficher dans le select
               if (request.status >= 200 && request.status < 400) {
-                if (
-                  !(excludedProductTable.indexOf(product) > -1) &&
-                  !(itemsOfRequest.indexOf(product) > -1)
-                ) {
-                  const option =
-                    '<option value="' +
-                    product +
-                    '">' +
-                    data.name +
-                    "</option>";
+                if (!(excludedProductTable.indexOf(product) > -1) && !(itemsOfRequest.indexOf(product) > -1)) {
+                  const option = '<option value="' + product + '">' + data.name + "</option>";
                   allOptions += option;
                 }
               }
@@ -249,9 +216,7 @@ function getTheEventData(Requestdata) {
           const productQuantity = document.createElement("div");
           productQuantity.className = "text-block-62 itemquantity";
           productQuantity.innerHTML =
-            '<input class="quantityInput" style="width: 75%" type="number" value="' +
-            0 +
-            '">';
+            '<input class="quantityInput" style="width: 75%" type="number" value="' + 0 + '">';
           productQuantity.setAttribute("id", "item.product._id" + "quantity");
           const productPrice = document.createElement("div");
           productPrice.className = "text-block-62";
@@ -371,23 +336,23 @@ function extractData(data) {
       data.event.name ? data.event.name : "?",
       data.createdAt
         ? Intl.DateTimeFormat("fr-FR", {
-          dateStyle: "short",
-          timeStyle: "short",
-        }).format(new Date(data.createdAt))
+            dateStyle: "short",
+            timeStyle: "short",
+          }).format(new Date(data.createdAt))
         : "?",
       data.updatedAt
         ? Intl.DateTimeFormat("fr-FR", {
-          dateStyle: "short",
-          timeStyle: "short",
-        }).format(new Date(data.updatedAt))
+            dateStyle: "short",
+            timeStyle: "short",
+          }).format(new Date(data.updatedAt))
         : "?",
       data.designUrl ? data.designUrl : "Pas de plan",
       data.refusalReason ? data.refusalReason : "Pas de raison specifiée",
       data.cancelledAt
         ? Intl.DateTimeFormat("fr-FR", {
-          dateStyle: "short",
-          timeStyle: "short",
-        }).format(new Date(data.cancelledAt))
+            dateStyle: "short",
+            timeStyle: "short",
+          }).format(new Date(data.cancelledAt))
         : "Pas annulé",
       data.comment ? data.comment : "",
       data.furniture ? "oui" : "non",
@@ -399,9 +364,7 @@ function extractData(data) {
       data.client.phone ? data.client.phone : "?",
       data.client.email ? data.client.email : "?",
       data.client.billingAddress ? data.client.billingAddress : "?",
-      data.client.address.formattedAddress
-        ? data.client.address.formattedAddress
-        : "?",
+      data.client.address.formattedAddress ? data.client.address.formattedAddress : "?",
       data.client.companyName ? data.client.companyName : "?",
       data.client.numTVA ? data.client.numTVA : "?",
       data.isPaid ? "Paiement effectué" : "Pas payé",
@@ -416,17 +379,12 @@ function extractData(data) {
     rows[1].push(item.quantity);
   });
 
-  let csvContent =
-    "data:text/csv;charset=utf-8,\uFEFF" +
-    rows.map((e) => e.join(";")).join("\r\n");
+  let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + rows.map((e) => e.join(";")).join("\r\n");
 
   var encodedUri = encodeURI(csvContent);
   var link = document.createElement("a");
   link.setAttribute("href", encodedUri);
-  link.setAttribute(
-    "download",
-    `Demande de stand ${data.client.firstName} ${data.client.lastName}.csv`
-  );
+  link.setAttribute("download", `Demande de stand ${data.client.firstName} ${data.client.lastName}.csv`);
   document.body.appendChild(link);
 
   link.click();
@@ -473,9 +431,7 @@ function displayAllData(data) {
   }).format(new Date(data.updatedAt));
   if (data.designUrl !== "") {
     designUrl.innerHTML =
-      "<a class='button retourbutton' href='" +
-      data.designUrl +
-      "' target='_blank'>Voir le plan</a>";
+      "<a class='button retourbutton' href='" + data.designUrl + "' target='_blank'>Voir le plan</a>";
   } else {
     designUrl.innerHTML = "Pas de plan";
   }
@@ -520,9 +476,9 @@ function displayAllData(data) {
   paymentMethod.innerHTML = data.paymentMethod ? data.paymentMethod : "Ø";
   paymentDate.innerHTML = data.paymentDate
     ? Intl.DateTimeFormat("fr-FR", {
-      dateStyle: "short",
-      timeStyle: "short",
-    }).format(new Date(data.paymentDate))
+        dateStyle: "short",
+        timeStyle: "short",
+      }).format(new Date(data.paymentDate))
     : "Ø";
   totalHT.innerHTML = Intl.NumberFormat("fr-FR", {
     style: "currency",
@@ -571,8 +527,7 @@ function displayAllData(data) {
     productDescription.innerHTML = item.product.description;
     productContainer.appendChild(productDescription);
     const productQuantity = document.createElement("div");
-    productQuantity.className =
-      "text-block-62 itemquantity quantity" + item.product.name;
+    productQuantity.className = "text-block-62 itemquantity quantity" + item.product.name;
     productQuantity.innerHTML = item.quantity;
     productQuantity.setAttribute("id", item.product._id + "quantity");
     productContainer.appendChild(productQuantity);
@@ -587,31 +542,22 @@ function displayAllData(data) {
     // fonction pour supprimer le product de l'affichage
     $(document).on("click", ".delete" + item.product._id, function () {
       console.log("delete item " + item.product.name);
-      const inputNumber = document.getElementById(
-        item.product._id + "quantityInput"
-      );
+      const inputNumber = document.getElementById(item.product._id + "quantityInput");
       inputNumber.value = 0;
-      const ContainerItem = document.getElementById(
-        item.product._id + "container"
-      );
+      const ContainerItem = document.getElementById(item.product._id + "container");
       ContainerItem.style.display = "none";
-      itemsOfRequest = itemsOfRequest.filter(
-        (itemOfRequest) => itemOfRequest != item.product._id
-      );
+      itemsOfRequest = itemsOfRequest.filter((itemOfRequest) => itemOfRequest != item.product._id);
     });
     productContainer.appendChild(deleteItem);
 
     // const CategoryItemsContainer = document.getElementById(item.product._id);
-    const allCatItemsContainers = document.getElementsByClassName(
-      "productContainer" + item.product._id
-    );
+    const allCatItemsContainers = document.getElementsByClassName("productContainer" + item.product._id);
     // if (CategoryItemsContainer !== null) {
     //   CategoryItemsContainer.appendChild(productContainer.cloneNode(true));
     // }
     if (allCatItemsContainers) {
       Object.values(allCatItemsContainers).forEach((catItemContainer) => {
-        if (!catItemContainer.hasChildNodes())
-          catItemContainer.appendChild(productContainer.cloneNode(true));
+        if (!catItemContainer.hasChildNodes()) catItemContainer.appendChild(productContainer.cloneNode(true));
       });
     }
 
@@ -636,8 +582,7 @@ function displayAllData(data) {
     productDescription.setAttribute("id", item._id + "customdescription");
     productContainer.appendChild(productDescription);
     const productQuantity = document.createElement("div");
-    productQuantity.className =
-      "text-block-62 customitemquantity quantity" + item.name;
+    productQuantity.className = "text-block-62 customitemquantity quantity" + item.name;
     productQuantity.innerHTML = item.quantity;
     productQuantity.setAttribute("id", item._id + "customquantity");
     productContainer.appendChild(productQuantity);
@@ -653,9 +598,7 @@ function displayAllData(data) {
     // fonction pour supprimer le product de l'affichage
     $(document).on("click", ".delete" + item._id, function () {
       console.log("delete item " + item.name);
-      const inputNumber = document.getElementById(
-        item._id + "customquantityinput"
-      );
+      const inputNumber = document.getElementById(item._id + "customquantityinput");
       inputNumber.value = 0;
       const ContainerItem = document.getElementById(item._id);
       ContainerItem.style.display = "none";
@@ -684,10 +627,7 @@ function deleteRequest(requestName, idRequest) {
   const deleteItemContainer = document.getElementById("DeleteItemContainer");
   deleteItemContainer.style.display = "block";
   const textDeleteVerif = document.getElementById("textDeleteVerif");
-  textDeleteVerif.innerHTML =
-    "Êtes-vous sûr de vouloir supprimer la requête n°<strong>" +
-    requestName +
-    "</strong> ?";
+  textDeleteVerif.innerHTML = "Êtes-vous sûr de vouloir supprimer la requête n°<strong>" + requestName + "</strong> ?";
   const cancelDeleteItem = document.getElementById("cancelDeleteItem");
   cancelDeleteItem.onclick = function () {
     deleteItemContainer.style.display = "none";
@@ -723,8 +663,7 @@ function updateRequest(data) {
 
   // infos générales
 
-  orderNumber.innerHTML =
-    '<input id="inputOrderNumber" value="' + data.orderNumber + '">';
+  orderNumber.innerHTML = '<input id="inputOrderNumber" value="' + data.orderNumber + '">';
   switch (data.status) {
     case 0:
       demandeState.innerHTML =
@@ -762,8 +701,7 @@ function updateRequest(data) {
       StandImage.type === "image/jpeg" ||
       StandImage.type === "application/pdf" ||
       StandImage.type === "application/msword" ||
-      StandImage.type ===
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      StandImage.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ) {
       console.log("bon format");
       proccessData(StandImage);
@@ -771,8 +709,7 @@ function updateRequest(data) {
       inputFile.value = "";
     }
   };
-  refusalReason.innerHTML =
-    '<input id="inputRefusalReason" value="' + data.refusalReason + '">';
+  refusalReason.innerHTML = '<input id="inputRefusalReason" value="' + data.refusalReason + '">';
 
   comment.innerHTML = '<input id="inputComment" value="' + data.comment + '">';
   if (furniture.innerHTML === "Oui") {
@@ -782,19 +719,13 @@ function updateRequest(data) {
     furniture.innerHTML =
       '<div style="display: flex"><input style="margin-right: 5px" type="checkbox" id="furnitureCheckbox" /><label>Intéressé</label></div>';
   }
-  hall.innerHTML =
-    '<input id="inputHall" maxlength="5" value="' + data.hall + '">';
-  standNumber.innerHTML =
-    '<input id="inputStandNumber" maxlength="5" value="' +
-    data.standNumber +
-    '">';
+  hall.innerHTML = '<input id="inputHall" maxlength="5" value="' + data.hall + '">';
+  standNumber.innerHTML = '<input id="inputStandNumber" maxlength="5" value="' + data.standNumber + '">';
 
   // infos client
 
-  clientLastName.innerHTML =
-    '<input id="inputClientLastName" value="' + data.client.lastName + '">';
-  clientFirstName.innerHTML =
-    '<input id="inputClientFirstName" value="' + data.client.firstName + '">';
+  clientLastName.innerHTML = '<input id="inputClientLastName" value="' + data.client.lastName + '">';
+  clientFirstName.innerHTML = '<input id="inputClientFirstName" value="' + data.client.firstName + '">';
   if (data.client.civility === 0) {
     clientCivility.innerHTML =
       '<select id="inputClientCivility"><option selected value="0">homme</option><option value="1">femme</option></select>';
@@ -802,26 +733,16 @@ function updateRequest(data) {
     clientCivility.innerHTML =
       '<select id="inputClientCivility"><option value="0">homme</option><option selected value="1">femme</option></select>';
   }
-  clientPhone.innerHTML =
-    '<input id="inputClientPhone" value="' + data.client.phone + '">';
-  clientEmail.innerHTML =
-    '<input id="inputClientEmail" value="' + data.client.email + '">';
-  clientBillingAddress.innerHTML =
-    '<input id="inputClientBillingAddress" value="' +
-    data.client.billingAddress +
-    '">';
+  clientPhone.innerHTML = '<input id="inputClientPhone" value="' + data.client.phone + '">';
+  clientEmail.innerHTML = '<input id="inputClientEmail" value="' + data.client.email + '">';
+  clientBillingAddress.innerHTML = '<input id="inputClientBillingAddress" value="' + data.client.billingAddress + '">';
   // clientAccountantAddress.innerHTML =
   //   '<input id="inputClientAccountantAddress" value="' +
   //   data.client.accountantAddress +
   //   '">';
-  clientAddress.innerHTML =
-    '<input id="inputClientAddress" value="' +
-    data.client.address.formattedAddress +
-    '">';
-  clientCompany.innerHTML =
-    '<input id="inputClientCompany" value="' + data.client.companyName + '">';
-  clientNumTVA.innerHTML =
-    '<input id="inputClientNumTVA" value="' + data.client.numTVA + '">';
+  clientAddress.innerHTML = '<input id="inputClientAddress" value="' + data.client.address.formattedAddress + '">';
+  clientCompany.innerHTML = '<input id="inputClientCompany" value="' + data.client.companyName + '">';
+  clientNumTVA.innerHTML = '<input id="inputClientNumTVA" value="' + data.client.numTVA + '">';
 
   // infos paiement
 
@@ -834,8 +755,7 @@ function updateRequest(data) {
     } else {
       paymentOnline.innerHTML =
         '<select id="inputPaymentOnline" onChange="listenOnlinePayment()"><option value="true">Oui</option><option selected value="false">Non</option></select>';
-      paymentMethod.innerHTML =
-        '<input id="inputPaymentMethod" value="' + data.paymentMethod + '">';
+      paymentMethod.innerHTML = '<input id="inputPaymentMethod" value="' + data.paymentMethod + '">';
     }
   }
   if (data.client.isSubjectToTVA) {
@@ -848,17 +768,14 @@ function updateRequest(data) {
 
   document.getElementById("inputPaymentOnline")
     ? (document.getElementById("inputPaymentOnline").onchange = () => {
-      if (document.getElementById("inputPaymentOnline").value === "true") {
-        paymentMethodComponent.style.display = "none";
-        paymentMethod.innerHTML = "";
-      } else {
-        paymentMethodComponent.style.display = "block";
-        paymentMethod.innerHTML =
-          '<input id="inputPaymentMethod" value="' +
-          data.paymentMethod +
-          '">';
-      }
-    })
+        if (document.getElementById("inputPaymentOnline").value === "true") {
+          paymentMethodComponent.style.display = "none";
+          paymentMethod.innerHTML = "";
+        } else {
+          paymentMethodComponent.style.display = "block";
+          paymentMethod.innerHTML = '<input id="inputPaymentMethod" value="' + data.paymentMethod + '">';
+        }
+      })
     : null;
 
   // infos items
@@ -875,13 +792,9 @@ function updateRequest(data) {
 
   //infos custom items
 
-  const allcustomitemquantity = document.querySelectorAll(
-    ".customitemquantity"
-  );
+  const allcustomitemquantity = document.querySelectorAll(".customitemquantity");
   const allcustomitemname = document.querySelectorAll(".customitemname");
-  const allcustomitemdescription = document.querySelectorAll(
-    ".customitemdescription"
-  );
+  const allcustomitemdescription = document.querySelectorAll(".customitemdescription");
   const allcustomitemprice = document.querySelectorAll(".customitemprice");
   Object.values(allcustomitemquantity).forEach((quantity) => {
     quantity.innerHTML =
@@ -933,28 +846,20 @@ function updateRequest(data) {
     const productName = document.createElement("div");
     productName.className = "text-block-62";
     productName.innerHTML =
-      '<input id="customNewProductNameInput' +
-      numberNewProduct +
-      '" style="width: 75%" type="text">';
+      '<input id="customNewProductNameInput' + numberNewProduct + '" style="width: 75%" type="text">';
     const productDescription = document.createElement("div");
     productDescription.className = "text-block-62";
     productDescription.innerHTML =
-      '<input id="customNewProductDescriptionInput' +
-      numberNewProduct +
-      '" style="width: 75%" type="text">';
+      '<input id="customNewProductDescriptionInput' + numberNewProduct + '" style="width: 75%" type="text">';
     const productQuantity = document.createElement("div");
     productQuantity.className = "text-block-62";
     productQuantity.innerHTML =
-      '<input id="customNewProductQuantityInput' +
-      numberNewProduct +
-      '" style="width: 75%" type="number">';
+      '<input id="customNewProductQuantityInput' + numberNewProduct + '" style="width: 75%" type="number">';
     // productQuantity.setAttribute("id", "item.product._id" + "quantity");
     const productPrice = document.createElement("div");
     productPrice.className = "text-block-62";
     productPrice.innerHTML =
-      '<input id="customNewProductPriceInput' +
-      numberNewProduct +
-      '" style="width: 75%" type="number">';
+      '<input id="customNewProductPriceInput' + numberNewProduct + '" style="width: 75%" type="number">';
     const deleteItem = document.createElement("div");
     deleteItem.innerHTML = "x";
     deleteItem.className = "deleteitems";
@@ -1021,23 +926,13 @@ function updateRequest(data) {
 
     var customLineItems = [];
     // custom product
-    const allCustomProductContainers = document.querySelectorAll(
-      ".customproductcontainer"
-    );
+    const allCustomProductContainers = document.querySelectorAll(".customproductcontainer");
     let number = 0;
     Object.values(allCustomProductContainers).forEach((container) => {
-      const name = document.getElementById(
-        container.id + "customnameinput"
-      ).value;
-      const size = document.getElementById(
-        container.id + "customdescriptioninput"
-      ).value;
-      const price = document.getElementById(
-        container.id + "custompriceinput"
-      ).value;
-      const quantity = document.getElementById(
-        container.id + "customquantityinput"
-      ).value;
+      const name = document.getElementById(container.id + "customnameinput").value;
+      const size = document.getElementById(container.id + "customdescriptioninput").value;
+      const price = document.getElementById(container.id + "custompriceinput").value;
+      const quantity = document.getElementById(container.id + "customquantityinput").value;
 
       if (quantity > 0) {
         customLineItems.push({
@@ -1052,25 +947,14 @@ function updateRequest(data) {
       number++;
     });
 
-    const allNewCustomProductsContainer =
-      document.querySelectorAll(".newcustomproduct");
+    const allNewCustomProductsContainer = document.querySelectorAll(".newcustomproduct");
     let numberNewProduct = 0;
     Object.values(allNewCustomProductsContainer).forEach((container) => {
-      if (
-        document.getElementById("customNewProductNameInput" + numberNewProduct)
-      ) {
-        const name = document.getElementById(
-          "customNewProductNameInput" + numberNewProduct
-        ).value;
-        const price = document.getElementById(
-          "customNewProductPriceInput" + numberNewProduct
-        ).value;
-        const size = document.getElementById(
-          "customNewProductDescriptionInput" + numberNewProduct
-        ).value;
-        const quantity = document.getElementById(
-          "customNewProductQuantityInput" + numberNewProduct
-        ).value;
+      if (document.getElementById("customNewProductNameInput" + numberNewProduct)) {
+        const name = document.getElementById("customNewProductNameInput" + numberNewProduct).value;
+        const price = document.getElementById("customNewProductPriceInput" + numberNewProduct).value;
+        const size = document.getElementById("customNewProductDescriptionInput" + numberNewProduct).value;
+        const quantity = document.getElementById("customNewProductQuantityInput" + numberNewProduct).value;
 
         if (quantity > 0) {
           customLineItems.push({
@@ -1106,18 +990,14 @@ function updateRequest(data) {
         lastName: document.getElementById("inputClientLastName").value,
         civility: document.getElementById("inputClientCivility").value,
         email: document.getElementById("inputClientEmail").value,
-        billingAddress: document.getElementById("inputClientBillingAddress")
-          .value,
+        billingAddress: document.getElementById("inputClientBillingAddress").value,
         phone: document.getElementById("inputClientPhone").value,
         address: {
           formattedAddress: document.getElementById("inputClientAddress").value,
         },
         companyName: document.getElementById("inputClientCompany").value,
         numTVA: document.getElementById("inputClientNumTVA").value,
-        isSubjectToTVA: document.getElementById("isSubjectToTVACheckbox")
-          .checked
-          ? true
-          : false,
+        isSubjectToTVA: document.getElementById("isSubjectToTVACheckbox").checked ? true : false,
       },
       status: +document.getElementById("inputRequestState").value,
       lineItems,
@@ -1134,10 +1014,7 @@ function updateRequest(data) {
       standNumber: document.getElementById("inputStandNumber").value,
     };
 
-    if (
-      document.getElementById("inputIsPaid") &&
-      document.getElementById("inputPaymentOnline")
-    ) {
+    if (document.getElementById("inputIsPaid") && document.getElementById("inputPaymentOnline")) {
       eventRequest = {
         ...eventRequest,
         isPaid: document.getElementById("inputIsPaid").value,
@@ -1145,11 +1022,7 @@ function updateRequest(data) {
       };
     }
 
-    if (
-      document.getElementById("inputIsPaid") &&
-      document.getElementById("inputIsPaid").value &&
-      !data.paymentDate
-    ) {
+    if (document.getElementById("inputIsPaid") && document.getElementById("inputIsPaid").value && !data.paymentDate) {
       eventRequest = {
         ...eventRequest,
         paymentDate: new Date(),
@@ -1157,10 +1030,7 @@ function updateRequest(data) {
     }
 
     // gestion du status
-    if (
-      document.getElementById("inputRequestState").value === "20" &&
-      preUpdateRequestState !== 20
-    ) {
+    if (document.getElementById("inputRequestState").value === "20" && preUpdateRequestState !== 20) {
       json = {
         eventRequest: {
           ...eventRequest,
@@ -1171,28 +1041,17 @@ function updateRequest(data) {
 
       mailJson = {
         ...mailJson,
-        text:
-          "Refus de votre demande de stand : https://imaginexpo.com/recapitulatif-demande-de-stand#" +
-          data._id,
+        text: "Refus de votre demande de stand : https://imaginexpo.com/recapitulatif-demande-de-stand#" + data._id,
       };
-    } else if (
-      document.getElementById("inputRequestState").value === "20" &&
-      preUpdateRequestState === 20
-    ) {
+    } else if (document.getElementById("inputRequestState").value === "20" && preUpdateRequestState === 20) {
       json = {
         eventRequest,
       };
-    } else if (
-      document.getElementById("inputRequestState").value === "15" &&
-      preUpdateRequestState === 15
-    ) {
+    } else if (document.getElementById("inputRequestState").value === "15" && preUpdateRequestState === 15) {
       json = {
         eventRequest,
       };
-    } else if (
-      document.getElementById("inputRequestState").value === "15" &&
-      preUpdateRequestState !== 15
-    ) {
+    } else if (document.getElementById("inputRequestState").value === "15" && preUpdateRequestState !== 15) {
       json = {
         eventRequest: {
           ...eventRequest,
@@ -1217,8 +1076,7 @@ function updateRequest(data) {
       mailJson = {
         ...mailJson,
         text:
-          "Votre demande de stand à été clôturée : https://imaginexpo.com/recapitulatif-demande-de-stand#" +
-          data._id,
+          "Votre demande de stand à été clôturée : https://imaginexpo.com/recapitulatif-demande-de-stand#" + data._id,
       };
     } else {
       json = {
@@ -1237,7 +1095,7 @@ function updateRequest(data) {
         eventRequest: {
           ...eventRequest,
           status: 5,
-        }
+        },
       };
 
       mailJson = {
@@ -1247,7 +1105,6 @@ function updateRequest(data) {
           data._id,
       };
     }
-
 
     let urlRequest = apiUrl + "event-requests/" + data._id;
 
@@ -1331,13 +1188,7 @@ function strToDate(dtStr) {
   let timeParts = dateParts[2].split(" ")[1].split(":");
   dateParts[2] = dateParts[2].split(" ")[0];
   // month is 0-based, that's why we need dataParts[1] - 1
-  return (dateObject = new Date(
-    +dateParts[2],
-    dateParts[1] - 1,
-    +dateParts[0],
-    timeParts[0],
-    timeParts[1]
-  ));
+  return (dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0], timeParts[0], timeParts[1]));
 }
 
 function isAnyDataUpdatedCheck(previousData, updatedData) {
@@ -1346,20 +1197,25 @@ function isAnyDataUpdatedCheck(previousData, updatedData) {
 
   let isLineItemsEqual = true;
   previousData.lineItems.map((item, index) => {
-    if ((item.quantity !== +updatedData.lineItems[index]?.quantity) || (item.product._id !== updatedData.lineItems[index]?.product)) {
+    if (
+      item.quantity !== +updatedData.lineItems[index]?.quantity ||
+      item.product._id !== updatedData.lineItems[index]?.product
+    ) {
       isLineItemsEqual = false;
     }
-  })
+  });
 
   let isCustomLineItemsEqual = true;
   previousData.customLineItems.map((item, index) => {
-    if ((item.name !== updatedData.customLineItems[index]?.name) ||
-      (item.price !== +updatedData.customLineItems[index]?.price) ||
-      (item.quantity !== +updatedData.customLineItems[index]?.quantity) ||
-      (item.size !== updatedData.customLineItems[index]?.size)) {
+    if (
+      item.name !== updatedData.customLineItems[index]?.name ||
+      item.price !== +updatedData.customLineItems[index]?.price ||
+      item.quantity !== +updatedData.customLineItems[index]?.quantity ||
+      item.size !== updatedData.customLineItems[index]?.size
+    ) {
       isCustomLineItemsEqual = false;
     }
-  })
+  });
 
   if (
     // previousData.status === updatedData.status &&

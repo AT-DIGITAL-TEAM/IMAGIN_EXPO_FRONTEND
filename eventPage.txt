@@ -2,16 +2,14 @@ let currentUrl = window.location.href;
 
 // différencier les liens prod / staging
 let apiUrl = window.location.href.includes("webflow")
-  ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
+  ? new URL("https://staging-imagin-expo-backend-api.apps.imaginexpo.com")
   : new URL("https://api.imaginexpo.com/api/v1/");
 
 // Recuperation des containers où mettre les infos détaillées de l'event
 const HeadingEvent = document.getElementById("HeadingEvent");
 const eventCode = document.getElementById("eventCode");
 const eventIllustration = document.getElementById("eventIllustration");
-const eventDescriptionIllustration = document.getElementById(
-  "eventDescriptionIllustration"
-);
+const eventDescriptionIllustration = document.getElementById("eventDescriptionIllustration");
 const eventDescription = document.getElementById("eventDescription");
 const eventDateDebut = document.getElementById("eventDateDebut");
 const eventDateFin = document.getElementById("eventDateFin");
@@ -29,9 +27,7 @@ const eventButtonModifier = document.getElementById("ModifButtonEvent");
 const eventButtonDelete = document.getElementById("DeleteButtonEvent");
 const eventButtonExtract = document.getElementById("ExtractButtonEvent");
 const eventButtonDuplicate = document.getElementById("DuplicateButtonEvent");
-const cancelCheckProductsItem = document.getElementById(
-  "cancelCheckProductsItem"
-);
+const cancelCheckProductsItem = document.getElementById("cancelCheckProductsItem");
 var categoriesSelected = [];
 var excludedProductSelected = [];
 
@@ -39,14 +35,10 @@ var excludedProductSelected = [];
 const AddEventGlobalButton = document.getElementById("AddEventGlobalButton");
 const CatExcludedContainer = document.getElementById("CatExcludedContainer");
 const CatChoosedContainer = document.getElementById("CatChoosedContainer");
-const textTopAddEventContainer = document.getElementById(
-  "textTopAddEventContainer"
-);
+const textTopAddEventContainer = document.getElementById("textTopAddEventContainer");
 const ProdExcludedContainer = document.getElementById("ProdExcludedContainer");
 const ProdChoosedContainer = document.getElementById("ProdChoosedContainer");
-const ChooseProductContainerGlobal = document.getElementById(
-  "ChooseProductContainer"
-);
+const ChooseProductContainerGlobal = document.getElementById("ChooseProductContainer");
 var ExcludedProducts = Object;
 
 const AddEventButton = document.getElementById("AddEventButton");
@@ -60,17 +52,11 @@ const PopUpEventEmail = document.getElementById("PopUpEventEmail");
 const PopUpEventPhone = document.getElementById("PopUpEventPhone");
 const PopUpEventOrderLimit = document.getElementById("PopUpEventOrderLimit");
 const PopUpIllustration = document.getElementById("PopUpIllustration");
-const PopUpDescriptionIllustration = document.getElementById(
-  "PopUpDescriptionIllustration"
-);
+const PopUpDescriptionIllustration = document.getElementById("PopUpDescriptionIllustration");
 const PopUpExampleProducts = document.getElementById("PopUpExampleProducts");
-const PopUpEventFurnitureOption = document.getElementById(
-  "PopUpEventFurnitureOption"
-);
+const PopUpEventFurnitureOption = document.getElementById("PopUpEventFurnitureOption");
 const PopUpEventHallOption = document.getElementById("PopUpEventHallOption");
-const PopUpDefaultPaymentMethod = document.getElementById(
-  "PopUpDefaultPaymentMethod"
-);
+const PopUpDefaultPaymentMethod = document.getElementById("PopUpDefaultPaymentMethod");
 
 let eventSelected = "";
 
@@ -96,10 +82,7 @@ fieldsetDescIllu.style.marginBottom = "10px";
 const legendDescIllu = document.createElement("legend");
 legendDescIllu.innerHTML = "Image de description :";
 const scrollableFieldsetDescIlluDiv = document.createElement("div");
-scrollableFieldsetDescIlluDiv.setAttribute(
-  "id",
-  "radioEventDescriptionIllustrationContainer"
-);
+scrollableFieldsetDescIlluDiv.setAttribute("id", "radioEventDescriptionIllustrationContainer");
 scrollableFieldsetDescIlluDiv.style.maxHeight = "350px";
 scrollableFieldsetDescIlluDiv.style.overflow = "auto";
 scrollableFieldsetDescIlluDiv.style.marginLeft = "10px";
@@ -138,9 +121,7 @@ function getEventIllustrations() {
         radioContainer.appendChild(radioInput);
         radioContainer.appendChild(radioLabel);
 
-        document
-          .getElementById("radioEventIllustrationContainer")
-          .appendChild(radioContainer);
+        document.getElementById("radioEventIllustrationContainer").appendChild(radioContainer);
       });
     }
   };
@@ -178,9 +159,7 @@ function getEventDescriptionIllustrations() {
         radioContainer.appendChild(radioInput);
         radioContainer.appendChild(radioLabel);
 
-        document
-          .getElementById("radioEventDescriptionIllustrationContainer")
-          .appendChild(radioContainer);
+        document.getElementById("radioEventDescriptionIllustrationContainer").appendChild(radioContainer);
       });
     }
   };
@@ -268,8 +247,7 @@ function getData() {
           date.style.marginBottom = "0px";
           eventElement.appendChild(date);
           const locationEvent = document.createElement("p");
-          locationEvent.innerHTML =
-            "<u>Lieu :</u> " + event.location.formattedAddress;
+          locationEvent.innerHTML = "<u>Lieu :</u> " + event.location.formattedAddress;
           locationEvent.style.marginBottom = "0px";
           eventElement.appendChild(locationEvent);
 
@@ -292,8 +270,7 @@ function getData() {
               descriptionIllustrationId = event.descriptionIllustration._id;
               eventDescriptionIllustration.innerHTML = `<a href="${event.descriptionIllustration.image}"><img style="width: 150px" src="${event.descriptionIllustration.image}"></a>`;
             } else {
-              eventDescriptionIllustration.innerHTML =
-                "Illustration par défaut";
+              eventDescriptionIllustration.innerHTML = "Illustration par défaut";
             }
             let exampleProductList = [];
             if (event.productExamples.length !== 0) {
@@ -309,12 +286,8 @@ function getData() {
             eventEmails.innerHTML = event.emails;
             eventPhone.innerHTML = event.phoneNumber;
             eventDescription.innerHTML = event.description;
-            eventFurnitureOption.innerHTML = event.furnitureOption
-              ? "Activée"
-              : "Désactivée";
-            eventHallOption.innerHTML = event.hallOption
-              ? "Activée"
-              : "Désactivée";
+            eventFurnitureOption.innerHTML = event.furnitureOption ? "Activée" : "Désactivée";
+            eventHallOption.innerHTML = event.hallOption ? "Activée" : "Désactivée";
             event.defaultPaymentMethod === "online"
               ? (eventPaymentMethod.innerHTML = "Oui")
               : (eventPaymentMethod.innerHTML = "Non");
@@ -363,7 +336,7 @@ function getData() {
                 event.defaultPaymentMethod,
                 illustrationId,
                 descriptionIllustrationId,
-                event.productExamples
+                event.productExamples,
               );
             };
             eventButtonDuplicate.onclick = function () {
@@ -384,7 +357,7 @@ function getData() {
                 event.defaultPaymentMethod,
                 illustrationId,
                 descriptionIllustrationId,
-                event.productExamples
+                event.productExamples,
               );
             };
             // fonction d'extraction des demandes liées à un événement
@@ -392,8 +365,7 @@ function getData() {
               let request = new XMLHttpRequest();
 
               // Changer l'endpoint en ajoutant + 'newEndpoint'
-              let url =
-                apiUrl.toString() + "/event-requests-from-event/" + event._id;
+              let url = apiUrl.toString() + "/event-requests-from-event/" + event._id;
 
               request.open("GET", url, true);
               request.setRequestHeader("ngrok-skip-browser-warning", 1);
@@ -489,9 +461,7 @@ function getCatData() {
             categoryChoosed.style.display = "none";
             categorySelect.style.display = "flex";
             if (categoriesSelected.indexOf(category._id) > -1) {
-              categoriesSelected = categoriesSelected.filter(
-                (categorySelected) => categorySelected != category._id
-              );
+              categoriesSelected = categoriesSelected.filter((categorySelected) => categorySelected != category._id);
             }
           };
           categoryChoosed.appendChild(categroyChoosedTextDiv);
@@ -555,9 +525,7 @@ function getProductFromCategoryData(listProducts, excludedProducts) {
       ProductExcludedSelect.style.display = "none";
       ProductSelect.style.display = "flex";
       if (excludedProductSelected.indexOf(product._id) > -1) {
-        excludedProductSelected = excludedProductSelected.filter(
-          (prod) => prod != product._id
-        );
+        excludedProductSelected = excludedProductSelected.filter((prod) => prod != product._id);
       }
     };
     ProductExcludedSelect.appendChild(ProductExcludedName);
@@ -572,10 +540,7 @@ function getProductFromCategoryData(listProducts, excludedProducts) {
     const alreadycheckedProdExcluded = [];
     Object.values(excludedProducts).forEach((product) => {
       Object.values(ProdChoosedContainer.children).forEach((child) => {
-        if (
-          child.id != product._id + "choosedProd" &&
-          alreadycheckedProdChoosed.includes(child) == false
-        ) {
+        if (child.id != product._id + "choosedProd" && alreadycheckedProdChoosed.includes(child) == false) {
           child.style.display = "flex";
         } else {
           child.style.display = "none";
@@ -585,10 +550,7 @@ function getProductFromCategoryData(listProducts, excludedProducts) {
         }
       });
       Object.values(ProdExcludedContainer.children).forEach((child) => {
-        if (
-          child.id != product._id + "excludedProd" &&
-          alreadycheckedProdExcluded.includes(child) == false
-        ) {
+        if (child.id != product._id + "excludedProd" && alreadycheckedProdExcluded.includes(child) == false) {
           child.style.display = "none";
         } else {
           child.style.display = "flex";
@@ -618,8 +580,7 @@ function supprimerevent(element, idEvent) {
   const deleteItemContainer = document.getElementById("DeleteItemContainer");
   deleteItemContainer.style.display = "block";
   const textDeleteVerif = document.getElementById("textDeleteVerif");
-  textDeleteVerif.innerHTML =
-    "Êtes-vous sûr de vouloir supprimer <strong>" + element + "</strong> ?";
+  textDeleteVerif.innerHTML = "Êtes-vous sûr de vouloir supprimer <strong>" + element + "</strong> ?";
   document.getElementById("cancelDeleteItem").onclick = function () {
     deleteItemContainer.style.display = "none";
   };
@@ -654,13 +615,7 @@ function strToDate(dtStr) {
   let timeParts = dateParts[2].split(" ")[1].split(":");
   dateParts[2] = dateParts[2].split(" ")[0];
   // month is 0-based, that's why we need dataParts[1] - 1
-  return (dateObject = new Date(
-    +dateParts[2],
-    dateParts[1] - 1,
-    +dateParts[0],
-    timeParts[0],
-    timeParts[1]
-  ));
+  return (dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0], timeParts[0], timeParts[1]));
 }
 
 // fonction de modification de l'event
@@ -682,7 +637,7 @@ function modifierevent(
   defaultPaymentMethod,
   illustrationId,
   descriptionIllustrationId,
-  exampleProducts
+  exampleProducts,
 ) {
   ExcludedProducts = excludedProducts;
   excludedProductSelected = [];
@@ -718,9 +673,7 @@ function modifierevent(
   if (illustrationId) {
     document.getElementById(illustrationId).checked = true;
   } else {
-    const illustrationsInputs = document.querySelectorAll(
-      'input[name="eventIllustration"]'
-    );
+    const illustrationsInputs = document.querySelectorAll('input[name="eventIllustration"]');
     Object.values(illustrationsInputs).forEach((illu) => {
       illu.checked = false;
     });
@@ -729,17 +682,13 @@ function modifierevent(
   if (descriptionIllustrationId) {
     document.getElementById(descriptionIllustrationId).checked = true;
   } else {
-    const illustrationsInputs = document.querySelectorAll(
-      'input[name="eventDescriptionIllustration"]'
-    );
+    const illustrationsInputs = document.querySelectorAll('input[name="eventDescriptionIllustration"]');
     Object.values(illustrationsInputs).forEach((illu) => {
       illu.checked = false;
     });
   }
 
-  const productExamplesChecked = document.querySelectorAll(
-    ".checkboxExampleProduct"
-  );
+  const productExamplesChecked = document.querySelectorAll(".checkboxExampleProduct");
   Object.values(productExamplesChecked).forEach((product) => {
     if (exampleProducts.some((p) => p._id === product.value)) {
       product.checked = true;
@@ -754,22 +703,16 @@ function modifierevent(
   // affiche les catégories en fonction du fait qu'elles soient exclues ou choisies
   Object.values(categories).forEach((category) => {
     Object.values(CatChoosedContainer.children).forEach((child) => {
-      if (
-        child.id != category._id + "choosed" &&
-        alreadycheckedCatChoosed.includes(child) == false
-      ) {
+      if (child.id != category._id + "choosed" && alreadycheckedCatChoosed.includes(child) == false) {
         child.style.display = "none";
         if (categoriesSelected.indexOf(child.id.replace("choosed", "")) > -1) {
           categoriesSelected = categoriesSelected.filter(
-            (categorySelected) =>
-              categorySelected != child.id.replace("choosed", "")
+            (categorySelected) => categorySelected != child.id.replace("choosed", ""),
           );
         }
       } else {
         child.style.display = "flex";
-        if (
-          !(categoriesSelected.indexOf(child.id.replace("choosed", "")) > -1)
-        ) {
+        if (!(categoriesSelected.indexOf(child.id.replace("choosed", "")) > -1)) {
           categoriesSelected.push(child.id.replace("choosed", ""));
         }
         if (!(alreadycheckedCatChoosed.indexOf(child) > -1)) {
@@ -778,10 +721,7 @@ function modifierevent(
       }
     });
     Object.values(CatExcludedContainer.children).forEach((child) => {
-      if (
-        child.id != category._id + "excluded" &&
-        alreadycheckedCatExcluded.includes(child) == false
-      ) {
+      if (child.id != category._id + "excluded" && alreadycheckedCatExcluded.includes(child) == false) {
         child.style.display = "flex";
       } else {
         child.style.display = "none";
@@ -800,8 +740,7 @@ function modifierevent(
     let pattern = /\d\d\d\d-[a-zA-Z]+-[a-zA-Z]+/i;
     if (!pattern.test(PopUpEventCode.value)) {
       document.getElementById("ErrorSentForm").style.display = "block";
-      document.getElementById("ErrorSentForm").innerHTML =
-        "Le code doit être au format 0000-MANIFESTATION-VILLE";
+      document.getElementById("ErrorSentForm").innerHTML = "Le code doit être au format 0000-MANIFESTATION-VILLE";
       return;
     }
 
@@ -819,25 +758,17 @@ function modifierevent(
     });
 
     let productExamplesArray = [];
-    const productExamplesChecked = document.querySelectorAll(
-      ".checkboxExampleProduct"
-    );
+    const productExamplesChecked = document.querySelectorAll(".checkboxExampleProduct");
     Object.values(productExamplesChecked).forEach((product) => {
       if (product.checked) productExamplesArray.push(product.value);
     });
 
-    const illustrationId = document.querySelector(
-      'input[name="eventIllustration"]:checked'
-    )
+    const illustrationId = document.querySelector('input[name="eventIllustration"]:checked')
       ? document.querySelector('input[name="eventIllustration"]:checked').value
       : null;
 
-    const DescriptionillustrationId = document.querySelector(
-      'input[name="eventDescriptionIllustration"]:checked'
-    )
-      ? document.querySelector(
-          'input[name="eventDescriptionIllustration"]:checked'
-        ).value
+    const DescriptionillustrationId = document.querySelector('input[name="eventDescriptionIllustration"]:checked')
+      ? document.querySelector('input[name="eventDescriptionIllustration"]:checked').value
       : null;
 
     if (!isEmailValid) return;
@@ -848,9 +779,7 @@ function modifierevent(
         name: PopUpEventName.value,
         eventCode: PopUpEventCode.value,
         description: tinyMCE.get("PopUpEventDescription").getContent(),
-        standOrderExpirationDate: strToDate(
-          PopUpEventOrderLimit.value.replace("@", " ")
-        ),
+        standOrderExpirationDate: strToDate(PopUpEventOrderLimit.value.replace("@", " ")),
         beginAt: strToDate(PopUpEventStart.value.replace("@", " ")),
         endAt: strToDate(PopUpEventEnd.value.replace("@", " ")),
         location: {
@@ -862,8 +791,7 @@ function modifierevent(
         phoneNumber: PopUpEventPhone.value,
         furnitureOption: PopUpEventFurnitureOption.checked,
         hallOption: PopUpEventHallOption.checked,
-        defaultPaymentMethod:
-          PopUpDefaultPaymentMethod.value === "other" ? "other" : "online",
+        defaultPaymentMethod: PopUpDefaultPaymentMethod.value === "other" ? "other" : "online",
         productExamples: productExamplesArray,
         illustration: illustrationId,
         descriptionIllustration: DescriptionillustrationId,
@@ -887,8 +815,7 @@ function modifierevent(
         }, 1000);
       } else {
         document.getElementById("ErrorSentForm").style.display = "block";
-        document.getElementById("ErrorSentForm").innerHTML =
-          "Veuillez correctement remplir le formulaire";
+        document.getElementById("ErrorSentForm").innerHTML = "Veuillez correctement remplir le formulaire";
       }
     };
 
@@ -921,7 +848,7 @@ function dupliquerevent(
   defaultPaymentMethod,
   illustrationId,
   descriptionIllustrationId,
-  exampleProducts
+  exampleProducts,
 ) {
   ExcludedProducts = excludedProducts;
   excludedProductSelected = [];
@@ -957,9 +884,7 @@ function dupliquerevent(
   if (illustrationId) {
     document.getElementById(illustrationId).checked = true;
   } else {
-    const illustrationsInputs = document.querySelectorAll(
-      'input[name="eventIllustration"]'
-    );
+    const illustrationsInputs = document.querySelectorAll('input[name="eventIllustration"]');
     Object.values(illustrationsInputs).forEach((illu) => {
       illu.checked = false;
     });
@@ -968,17 +893,13 @@ function dupliquerevent(
   if (descriptionIllustrationId) {
     document.getElementById(descriptionIllustrationId).checked = true;
   } else {
-    const illustrationsInputs = document.querySelectorAll(
-      'input[name="eventDescriptionIllustration"]'
-    );
+    const illustrationsInputs = document.querySelectorAll('input[name="eventDescriptionIllustration"]');
     Object.values(illustrationsInputs).forEach((illu) => {
       illu.checked = false;
     });
   }
 
-  const productExamplesChecked = document.querySelectorAll(
-    ".checkboxExampleProduct"
-  );
+  const productExamplesChecked = document.querySelectorAll(".checkboxExampleProduct");
   Object.values(productExamplesChecked).forEach((product) => {
     if (exampleProducts.some((p) => p._id === product.value)) {
       product.checked = true;
@@ -993,22 +914,16 @@ function dupliquerevent(
   // affiche les catégories en fonction du fait qu'elles soient exclues ou choisies à partir de l'event dupliqué
   Object.values(categories).forEach((category) => {
     Object.values(CatChoosedContainer.children).forEach((child) => {
-      if (
-        child.id != category._id + "choosed" &&
-        alreadycheckedCatChoosed.includes(child) == false
-      ) {
+      if (child.id != category._id + "choosed" && alreadycheckedCatChoosed.includes(child) == false) {
         child.style.display = "none";
         if (categoriesSelected.indexOf(child.id.replace("choosed", "")) > -1) {
           categoriesSelected = categoriesSelected.filter(
-            (categorySelected) =>
-              categorySelected != child.id.replace("choosed", "")
+            (categorySelected) => categorySelected != child.id.replace("choosed", ""),
           );
         }
       } else {
         child.style.display = "flex";
-        if (
-          !(categoriesSelected.indexOf(child.id.replace("choosed", "")) > -1)
-        ) {
+        if (!(categoriesSelected.indexOf(child.id.replace("choosed", "")) > -1)) {
           categoriesSelected.push(child.id.replace("choosed", ""));
         }
         if (!(alreadycheckedCatChoosed.indexOf(child) > -1)) {
@@ -1017,10 +932,7 @@ function dupliquerevent(
       }
     });
     Object.values(CatExcludedContainer.children).forEach((child) => {
-      if (
-        child.id != category._id + "excluded" &&
-        alreadycheckedCatExcluded.includes(child) == false
-      ) {
+      if (child.id != category._id + "excluded" && alreadycheckedCatExcluded.includes(child) == false) {
         child.style.display = "flex";
       } else {
         child.style.display = "none";
@@ -1034,25 +946,17 @@ function dupliquerevent(
   // Fonction pour parametrer le bouton d'envoie du formulaire DE DUPLICATION
   AddEventButton.onclick = function () {
     let productExamplesArray = [];
-    const productExamplesChecked = document.querySelectorAll(
-      ".checkboxExampleProduct"
-    );
+    const productExamplesChecked = document.querySelectorAll(".checkboxExampleProduct");
     Object.values(productExamplesChecked).forEach((product) => {
       if (product.checked) productExamplesArray.push(product.value);
     });
 
-    const illustrationId = document.querySelector(
-      'input[name="eventIllustration"]:checked'
-    )
+    const illustrationId = document.querySelector('input[name="eventIllustration"]:checked')
       ? document.querySelector('input[name="eventIllustration"]:checked').value
       : null;
 
-    const descriptionIllustrationId = document.querySelector(
-      'input[name="eventDescriptionIllustration"]:checked'
-    )
-      ? document.querySelector(
-          'input[name="eventDescriptionIllustration"]:checked'
-        ).value
+    const descriptionIllustrationId = document.querySelector('input[name="eventDescriptionIllustration"]:checked')
+      ? document.querySelector('input[name="eventDescriptionIllustration"]:checked').value
       : null;
 
     const json = {
@@ -1060,9 +964,7 @@ function dupliquerevent(
         name: PopUpEventName.value,
         eventCode: PopUpEventCode.value,
         description: tinyMCE.get("PopUpEventDescription").getContent(),
-        standOrderExpirationDate: strToDate(
-          PopUpEventOrderLimit.value.replace("@", " ")
-        ),
+        standOrderExpirationDate: strToDate(PopUpEventOrderLimit.value.replace("@", " ")),
         beginAt: strToDate(PopUpEventStart.value.replace("@", " ")),
         endAt: strToDate(PopUpEventEnd.value.replace("@", " ")),
         location: {
@@ -1135,16 +1037,12 @@ function dupliquerevent(
     PopUpDefaultPaymentMethod.value = "";
     textTopAddEventContainer.innerHTML = "Nouvel événement";
 
-    const illustrationsInputs = document.querySelectorAll(
-      'input[name="eventIllustration"]'
-    );
+    const illustrationsInputs = document.querySelectorAll('input[name="eventIllustration"]');
     Object.values(illustrationsInputs).forEach((illu) => {
       illu.checked = false;
     });
 
-    const productExamplesChecked = document.querySelectorAll(
-      ".checkboxExampleProduct"
-    );
+    const productExamplesChecked = document.querySelectorAll(".checkboxExampleProduct");
     Object.values(productExamplesChecked).forEach((product) => {
       product.checked = false;
     });
@@ -1162,8 +1060,7 @@ function dupliquerevent(
       child.style.display = "none";
       if (categoriesSelected.indexOf(child.id.replace("choosed", "")) > -1) {
         categoriesSelected = categoriesSelected.filter(
-          (categorySelected) =>
-            categorySelected != child.id.replace("choosed", "")
+          (categorySelected) => categorySelected != child.id.replace("choosed", ""),
         );
       }
     });
@@ -1178,8 +1075,7 @@ AddEventButton.onclick = function (e) {
   let pattern = /\d\d\d\d-[a-zA-Z]+-[a-zA-Z]+/i;
   if (!pattern.test(PopUpEventCode.value)) {
     document.getElementById("ErrorSentForm").style.display = "block";
-    document.getElementById("ErrorSentForm").innerHTML =
-      "Le code doit être au format 0000-MANIFESTATION-VILLE";
+    document.getElementById("ErrorSentForm").innerHTML = "Le code doit être au format 0000-MANIFESTATION-VILLE";
     return;
   }
 
@@ -1199,16 +1095,12 @@ AddEventButton.onclick = function (e) {
   if (!isEmailValid) return;
 
   let productExamplesArray = [];
-  const productExamplesChecked = document.querySelectorAll(
-    ".checkboxExampleProduct"
-  );
+  const productExamplesChecked = document.querySelectorAll(".checkboxExampleProduct");
   Object.values(productExamplesChecked).forEach((product) => {
     if (product.checked) productExamplesArray.push(product.value);
   });
 
-  const illustrationId = document.querySelector(
-    'input[name="eventIllustration"]:checked'
-  )
+  const illustrationId = document.querySelector('input[name="eventIllustration"]:checked')
     ? document.querySelector('input[name="eventIllustration"]:checked').value
     : null;
 
@@ -1218,9 +1110,7 @@ AddEventButton.onclick = function (e) {
       name: PopUpEventName.value,
       description: tinyMCE.get("PopUpEventDescription").getContent(),
       eventCode: PopUpEventCode.value,
-      standOrderExpirationDate: strToDate(
-        PopUpEventOrderLimit.value.replace("@", " ")
-      ),
+      standOrderExpirationDate: strToDate(PopUpEventOrderLimit.value.replace("@", " ")),
       beginAt: strToDate(PopUpEventStart.value.replace("@", " ")),
       endAt: strToDate(PopUpEventEnd.value.replace("@", " ")),
       location: {
@@ -1232,8 +1122,7 @@ AddEventButton.onclick = function (e) {
       phoneNumber: PopUpEventPhone.value,
       hallOption: PopUpEventHallOption.checked ? true : false,
       furnitureOption: PopUpEventFurnitureOption.checked ? true : false,
-      defaultPaymentMethod:
-        PopUpDefaultPaymentMethod.value === "other" ? "other" : "online",
+      defaultPaymentMethod: PopUpDefaultPaymentMethod.value === "other" ? "other" : "online",
       productExamples: productExamplesArray,
       illustration: illustrationId,
     },
@@ -1256,8 +1145,7 @@ AddEventButton.onclick = function (e) {
       }, 1000);
     } else {
       document.getElementById("ErrorSentForm").style.display = "block";
-      document.getElementById("ErrorSentForm").innerHTML =
-        "Veuillez correctement remplir le formulaire";
+      document.getElementById("ErrorSentForm").innerHTML = "Veuillez correctement remplir le formulaire";
     }
   };
 
@@ -1372,9 +1260,7 @@ function extractData(data) {
       request.client.phone ? request.client.phone : "?",
       request.client.email ? request.client.email : "?",
       request.client.billingAddress ? request.client.billingAddress : "?",
-      request.client.address.formattedAddress
-        ? request.client.address.formattedAddress
-        : "?",
+      request.client.address.formattedAddress ? request.client.address.formattedAddress : "?",
       request.client.companyName ? request.client.companyName : "?",
       request.client.numTVA ? request.client.numTVA : "?",
       request.isPaid ? "Paiement effectué" : "Pas payé",
@@ -1388,16 +1274,12 @@ function extractData(data) {
   });
 
   let csvContent =
-    "data:text/csv;charset=utf-8,\uFEFF" +
-    rows.map((e) => e.map((value) => `"${value}"`).join(";")).join("\r\n");
+    "data:text/csv;charset=utf-8,\uFEFF" + rows.map((e) => e.map((value) => `"${value}"`).join(";")).join("\r\n");
 
   var encodedUri = encodeURI(csvContent);
   var link = document.createElement("a");
   link.setAttribute("href", encodedUri);
-  link.setAttribute(
-    "download",
-    `Demandes de stand de l'événement ${eventSelected}.csv`
-  );
+  link.setAttribute("download", `Demandes de stand de l'événement ${eventSelected}.csv`);
   document.body.appendChild(link);
 
   link.click();

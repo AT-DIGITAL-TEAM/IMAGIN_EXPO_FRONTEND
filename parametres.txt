@@ -1,6 +1,6 @@
 // différencier les liens prod / staging
 let apiUrl = window.location.href.includes("webflow")
-  ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
+  ? new URL("https://staging-imagin-expo-backend-api.apps.imaginexpo.com")
   : new URL("https://api.imaginexpo.com/api/v1/");
 
 const ProductOptions = [];
@@ -10,9 +10,7 @@ const ProductOptions = [];
 // ****************************** //
 
 // creation du formulaire d'ajout de nouvelle illustration d'evenement
-const addEventIlluFormContainer = document.getElementById(
-  "addEventIlluFormContainer"
-);
+const addEventIlluFormContainer = document.getElementById("addEventIlluFormContainer");
 const formContainer = document.createElement("div");
 formContainer.style.display = "flex";
 formContainer.style.width = "100%";
@@ -120,9 +118,7 @@ function getEventIllustrationData() {
     let data = dataBrut.eventIllustrations;
 
     if (request.status >= 200 && request.status < 400) {
-      const eventIllustrationContainer = document.getElementById(
-        "eventIllustrationList"
-      );
+      const eventIllustrationContainer = document.getElementById("eventIllustrationList");
 
       Object.values(data).forEach((illustration) => {
         // vérification de si le produit est pas supprimé
@@ -157,11 +153,7 @@ function getEventIllustrationData() {
           supprimer.innerHTML = "Supprimer";
           supprimer.className = "button redbutton w-button";
           supprimer.onclick = function () {
-            supprimerItem(
-              "cette illustration",
-              "event-illustrations/",
-              illustration._id
-            );
+            supprimerItem("cette illustration", "event-illustrations/", illustration._id);
           };
           buttonContainer.appendChild(supprimer);
 
@@ -247,9 +239,7 @@ function modifierEventIllustration(id, imageContainer, updateButton) {
 // ********************************************* //
 
 // creation du formulaire d'ajout de nouvelle illustration d'evenement
-const addEventDescIlluFormContainer = document.getElementById(
-  "addEventDescIlluFormContainer"
-);
+const addEventDescIlluFormContainer = document.getElementById("addEventDescIlluFormContainer");
 const formDescIlluContainer = document.createElement("div");
 formDescIlluContainer.style.display = "flex";
 formDescIlluContainer.style.width = "100%";
@@ -264,16 +254,11 @@ fileUploadDescIlluErrorMsg.innerHTML = "Mauvais format";
 fileUploadDescIlluErrorMsg.style.color = "red";
 fileUploadDescIlluErrorMsg.style.display = "none";
 fileUploadDescIlluInput.setAttribute("type", "file");
-fileUploadDescIlluInput.setAttribute(
-  "id",
-  "eventDescriptionIllustrationUploadInput"
-);
+fileUploadDescIlluInput.setAttribute("id", "eventDescriptionIllustrationUploadInput");
 fileUploadDescIlluInput.setAttribute("accept", "image/png, image/jpeg");
 // vérification du format du fichier envoyé
 fileUploadDescIlluInput.onchange = function () {
-  const inputFile = document.getElementById(
-    "eventDescriptionIllustrationUploadInput"
-  );
+  const inputFile = document.getElementById("eventDescriptionIllustrationUploadInput");
   const EventImage = inputFile.files[0];
   if (EventImage.type === "image/png" || EventImage.type === "image/jpeg") {
     console.log("bon format");
@@ -311,8 +296,7 @@ createButtonDescIllu.onclick = function () {
       },
     };
 
-    let urlEventDescriptionIllustration =
-      apiUrl + "event-description-illustrations";
+    let urlEventDescriptionIllustration = apiUrl + "event-description-illustrations";
 
     const xhr = new XMLHttpRequest();
 
@@ -357,9 +341,7 @@ function getEventDescriptionIllustrationData() {
     let data = dataBrut.eventDescriptionIllustrations;
 
     if (request.status >= 200 && request.status < 400) {
-      const eventDescriptionIllustrationContainer = document.getElementById(
-        "eventDescriptionIllustrationContainer"
-      );
+      const eventDescriptionIllustrationContainer = document.getElementById("eventDescriptionIllustrationContainer");
 
       Object.values(data).forEach((illustration) => {
         // vérification de si le produit est pas supprimé
@@ -386,11 +368,7 @@ function getEventDescriptionIllustrationData() {
           modifier.innerHTML = "Modifier";
           modifier.className = "button orangebutton w-button";
           modifier.onclick = function () {
-            modifierEventDescriptionIllustration(
-              illustration._id,
-              imgContainer,
-              modifier
-            );
+            modifierEventDescriptionIllustration(illustration._id, imgContainer, modifier);
           };
           buttonContainer.appendChild(modifier);
 
@@ -398,19 +376,13 @@ function getEventDescriptionIllustrationData() {
           supprimer.innerHTML = "Supprimer";
           supprimer.className = "button redbutton w-button";
           supprimer.onclick = function () {
-            supprimerItem(
-              "cette illustration",
-              "event-description-illustrations/",
-              illustration._id
-            );
+            supprimerItem("cette illustration", "event-description-illustrations/", illustration._id);
           };
           buttonContainer.appendChild(supprimer);
 
           illustrationElement.appendChild(buttonContainer);
 
-          eventDescriptionIllustrationContainer.appendChild(
-            illustrationElement
-          );
+          eventDescriptionIllustrationContainer.appendChild(illustrationElement);
         }
       });
     }
@@ -424,11 +396,7 @@ function getEventDescriptionIllustrationData() {
 })();
 
 // fonction de modification d'une illustration
-function modifierEventDescriptionIllustration(
-  id,
-  imageContainer,
-  updateButton
-) {
+function modifierEventDescriptionIllustration(id, imageContainer, updateButton) {
   imageContainer.innerHTML = `<div style="width: 80%;"><div class="text-block-53">Ajouter une image (png/jpeg)</div><input id='updateInput${id}' type="file" accept="image/png, image/jpeg"><div id="errorMsg${id}" style="color: red; display: block;">Mauvais format</div></div>`;
 
   updateButton.innerHTML = "Valider";
@@ -458,8 +426,7 @@ function modifierEventDescriptionIllustration(
         },
       };
 
-      let urlEventDescriptionIllustration =
-        apiUrl + "event-description-illustrations/" + id;
+      let urlEventDescriptionIllustration = apiUrl + "event-description-illustrations/" + id;
 
       const xhr = new XMLHttpRequest();
 
@@ -494,16 +461,10 @@ function modifierEventDescriptionIllustration(
 // *****Exemples de produits***** //
 // ****************************** //
 
-const imageExampleProductContainer = document.getElementById(
-  "imageExampleProductContainer"
-);
+const imageExampleProductContainer = document.getElementById("imageExampleProductContainer");
 
-const nameExampleProductFormInput = document.getElementById(
-  "NameExampleProductInput"
-);
-const descriptionExampleProductFormInput = document.getElementById(
-  "DescriptionExampleProductInput"
-);
+const nameExampleProductFormInput = document.getElementById("NameExampleProductInput");
+const descriptionExampleProductFormInput = document.getElementById("DescriptionExampleProductInput");
 
 //Gestion input upload file
 const fileUploadExampleProductInput = document.createElement("input");
@@ -535,9 +496,7 @@ imageExampleProductContainer.appendChild(fileUploadExampleProductLabel);
 imageExampleProductContainer.appendChild(fileUploadExampleProductInput);
 imageExampleProductContainer.appendChild(fileUploadExampleProductErrorMsg);
 
-const submitExampleProductButton = document.getElementById(
-  "submitExampleProductButton"
-);
+const submitExampleProductButton = document.getElementById("submitExampleProductButton");
 submitExampleProductButton.onclick = function (e) {
   e.preventDefault();
   var exampleProductName = nameExampleProductFormInput.value;
@@ -596,8 +555,7 @@ function getExampleProductData() {
     let data = dataBrut.productExamples;
 
     if (request.status >= 200 && request.status < 400) {
-      const productExampleContainer =
-        document.getElementById("productExampleList");
+      const productExampleContainer = document.getElementById("productExampleList");
 
       Object.values(data).forEach((product) => {
         // vérification de si le produit est pas supprimé
@@ -635,11 +593,7 @@ function getExampleProductData() {
           dupliquer.innerHTML = "Dupliquer";
           dupliquer.className = "button bluebutton w-button";
           dupliquer.onclick = function () {
-            dupliquerExampleProduct(
-              product.name,
-              product.description,
-              product.image
-            );
+            dupliquerExampleProduct(product.name, product.description, product.image);
           };
           buttonContainer.appendChild(dupliquer);
 
@@ -655,7 +609,7 @@ function getExampleProductData() {
               product.description,
               imgContainer,
               product.image,
-              modifier
+              modifier,
             );
           };
           buttonContainer.appendChild(modifier);
@@ -692,7 +646,7 @@ function modifierExampleProduct(
   currentDescription,
   imageContainer,
   currentImage,
-  updateButton
+  updateButton,
 ) {
   nameContainer.innerHTML = `<input id="nameInput${id}" type="text" value="${currentName}">`;
   descriptionContainer.innerHTML = `<input id="descriptionInput${id}" type="text" value="${currentDescription}">`;
@@ -770,12 +724,17 @@ function dupliquerExampleProduct(name, description, image) {
 // **********Produits************ //
 // ****************************** //
 
+let currentProductRequestLength = 0;
+let currentProductPage = 1;
+
+const PageNumberIndicator = document.getElementById("pageNumber");
+
 // récupère et affiche les produits dans la liste
-function getProductData() {
+function getProductData(page) {
   let request = new XMLHttpRequest();
 
   // Changer l'endpoint en ajoutant + 'newEndpoint'
-  let url = apiUrl.toString() + "products";
+  let url = apiUrl.toString() + "products" + page;
 
   request.open("GET", url, true);
   request.setRequestHeader("ngrok-skip-browser-warning", 1);
@@ -784,8 +743,13 @@ function getProductData() {
     let dataBrut = JSON.parse(this.response);
     let data = dataBrut.products;
 
+    currentProductRequestLength = data.length;
     if (request.status >= 200 && request.status < 400) {
       const productContainer = document.getElementById("productList");
+
+      while (productContainer.firstChild) {
+        productContainer.firstChild.remove();
+      }
 
       Object.values(data).forEach((product) => {
         // vérification de si le produit est pas supprimé
@@ -817,11 +781,7 @@ function getProductData() {
           dupliquer.innerHTML = "Dupliquer";
           dupliquer.className = "button bluebutton w-button";
           dupliquer.onclick = function () {
-            dupliquerProduct(
-              product.name,
-              product.description,
-              product.price.amount
-            );
+            dupliquerProduct(product.name, product.description, product.price.amount);
           };
           buttonContainer.appendChild(dupliquer);
 
@@ -837,7 +797,7 @@ function getProductData() {
               dimensions,
               product.description,
               prix,
-              product.price.amount
+              product.price.amount,
             );
           };
           buttonContainer.appendChild(modifier);
@@ -856,8 +816,7 @@ function getProductData() {
 
           // Remplissage du select du formulaire d'ajout d'une nouvelle catégorie (liste des produits disponibles)
 
-          const selectProductsCat =
-            document.getElementById("selectProductsCat");
+          const selectProductsCat = document.getElementById("selectProductsCat");
 
           var checkbox = document.createElement("input");
           checkbox.setAttribute("type", "checkbox");
@@ -885,8 +844,28 @@ function getProductData() {
 }
 
 (function () {
-  getProductData();
+  getProductData("?p=1");
 })();
+
+// configuration des boutons pour changer de pages dans les produits
+const NextButton = document.getElementById("nextPageRequest");
+const PreviousButton = document.getElementById("previousPageRequest");
+
+NextButton.onclick = function () {
+  if (currentProductRequestLength === 100) {
+    currentProductPage = currentProductPage + 1;
+    PageNumberIndicator.innerHTML = "Page " + currentProductPage;
+    getProductData("?p=" + currentProductPage);
+  }
+};
+
+PreviousButton.onclick = function () {
+  if (currentProductPage != 1) {
+    currentProductPage = currentProductPage - 1;
+    PageNumberIndicator.innerHTML = "Page " + currentProductPage;
+    getData("?p=" + currentProductPage);
+  }
+};
 
 // fonction de modification d'un produit
 function modifierProduct(
@@ -897,14 +876,12 @@ function modifierProduct(
   dimensionsContainer,
   dimensionsActuelles,
   prixContainer,
-  prixActuel
+  prixActuel,
 ) {
   // change tout en input pour pouvoir modifier les infos du produit
   nomContainer.innerHTML = '<input id="nomProduct" value="' + nomActuel + '">';
-  dimensionsContainer.innerHTML =
-    '<input id="dimensionsProduct" value="' + dimensionsActuelles + '">';
-  prixContainer.innerHTML =
-    '<input id="priceProduct" value="' + prixActuel + '">';
+  dimensionsContainer.innerHTML = '<input id="dimensionsProduct" value="' + dimensionsActuelles + '">';
+  prixContainer.innerHTML = '<input id="priceProduct" value="' + prixActuel + '">';
   button.innerHTML = "Valider";
   button.onclick = function () {
     // json de la modification
@@ -1063,14 +1040,7 @@ function getCatData() {
           modifier.innerHTML = "Modifier";
           modifier.className = "button orangebutton w-button";
           modifier.onclick = function () {
-            modifierCat(
-              modifier,
-              category._id,
-              nom,
-              category.name,
-              produits,
-              category.products
-            );
+            modifierCat(modifier, category._id, nom, category.name, produits, category.products);
           };
           buttonContainer.appendChild(modifier);
 
@@ -1098,14 +1068,7 @@ function getCatData() {
 })();
 
 // fonction de modification d'une catégorie
-function modifierCat(
-  button,
-  catId,
-  nomContainer,
-  nomActuel,
-  ProduitsContainer,
-  ProduitsActuels
-) {
+function modifierCat(button, catId, nomContainer, nomActuel, ProduitsContainer, ProduitsActuels) {
   // changement en input pour pouvoir modifier les infos
   nomContainer.innerHTML = '<input id="nomCat" value="' + nomActuel + '">';
   // ProduitsContainer.innerHTML =
@@ -1224,8 +1187,7 @@ function supprimerItem(element, table, idItem) {
   const deleteItemContainer = document.getElementById("DeleteItemContainer");
   deleteItemContainer.style.display = "block";
   const textDeleteVerif = document.getElementById("textDeleteVerif");
-  textDeleteVerif.innerHTML =
-    "Êtes-vous sûr de vouloir supprimer <strong>" + element + "</strong> ?";
+  textDeleteVerif.innerHTML = "Êtes-vous sûr de vouloir supprimer <strong>" + element + "</strong> ?";
   const cancelDeleteItem = document.getElementById("cancelDeleteItem");
   cancelDeleteItem.onclick = function () {
     deleteItemContainer.style.display = "none";

@@ -1,6 +1,6 @@
 // différencier les liens prod / staging
 let apiUrl = window.location.href.includes("webflow")
-  ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
+  ? new URL("https://staging-imagin-expo-backend-api.apps.imaginexpo.com")
   : new URL("https://api.imaginexpo.com/api/v1/");
 
 // variables qui seront remplies en fonction de l'event sélectionné
@@ -11,18 +11,10 @@ const ExcludedEventProducts = [];
 const RequestTotalHT = document.getElementById("RequestTotalHT");
 const RequestTVA = document.getElementById("RequestTVA");
 const RequestTotalTTC = document.getElementById("RequestTotalTTC");
-const EventDescriptionContent = document.getElementById(
-  "EventDescriptionContent"
-);
-const EventIllustrationContainer = document.getElementById(
-  "eventIllustrationContainer"
-);
-const EventDescriptionImageContainer = document.getElementById(
-  "EventDescriptionImageContainer"
-);
-const ExampleProductsListContainer = document.getElementById(
-  "ExampleProductsContainer"
-);
+const EventDescriptionContent = document.getElementById("EventDescriptionContent");
+const EventIllustrationContainer = document.getElementById("eventIllustrationContainer");
+const EventDescriptionImageContainer = document.getElementById("EventDescriptionImageContainer");
+const ExampleProductsListContainer = document.getElementById("ExampleProductsContainer");
 const EventContactContent = document.getElementById("EventContactContent");
 const TVACheckBox = document.getElementById("TVACheckbox");
 const TVAAmountText = document.getElementById("TVAAmountText");
@@ -39,9 +31,7 @@ const ClientCompany = document.getElementById("ClientCompany");
 const ClientNumTVA = document.getElementById("ClientNumTVA");
 const ClientCivility = document.getElementById("ClientCivility");
 const ClientBillingAddress = document.getElementById("ClientBillingAddress");
-const ClientAccountantAddress = document.getElementById(
-  "ClientAccountantAddress"
-);
+const ClientAccountantAddress = document.getElementById("ClientAccountantAddress");
 const RequestComment = document.getElementById("RequestComment");
 const RequestHall = document.getElementById("RequestHall");
 const RequestStandNumber = document.getElementById("RequestStandNumber");
@@ -52,9 +42,7 @@ let isHallOptionTrue = true;
 let defaultPaymentMethod = "";
 
 const hallContainer = document.getElementById("hallContainer");
-const furnitureCheckBoxContainer = document.getElementById(
-  "furnitureCheckBoxContainer"
-);
+const furnitureCheckBoxContainer = document.getElementById("furnitureCheckBoxContainer");
 
 // dropdown des langues
 const dropdownFR = document.getElementById("dropdownFR");
@@ -73,7 +61,7 @@ fileUploadErrorMsg.style.display = "none";
 fileUploadInput.setAttribute("type", "file");
 fileUploadInput.setAttribute(
   "accept",
-  "image/png, image/jpeg, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  "image/png, image/jpeg, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 );
 // vérification du format du fichier envoyé
 fileUploadInput.onchange = function () {
@@ -84,8 +72,7 @@ fileUploadInput.onchange = function () {
     StandImage.type === "image/jpeg" ||
     StandImage.type === "application/pdf" ||
     StandImage.type === "application/msword" ||
-    StandImage.type ===
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    StandImage.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
   ) {
     console.log("bon format");
     fileUploadErrorMsg.style.display = "none";
@@ -113,14 +100,10 @@ var lineItems = [];
 //gestion de la tva
 TVACheckBox.onchange = () => {
   if (TVACheckBox.checked) {
-    TVAAmountText.innerHTML =
-      TVAAmountText.innerHTML.substring(0, 3) === "TVA"
-        ? "TVA À 20%"
-        : "20% VAT";
+    TVAAmountText.innerHTML = TVAAmountText.innerHTML.substring(0, 3) === "TVA" ? "TVA À 20%" : "20% VAT";
     calculateTotal();
   } else {
-    TVAAmountText.innerHTML =
-      TVAAmountText.innerHTML.substring(0, 3) === "TVA" ? "TVA À 0%" : "0% VAT";
+    TVAAmountText.innerHTML = TVAAmountText.innerHTML.substring(0, 3) === "TVA" ? "TVA À 0%" : "0% VAT";
     calculateTotal();
   }
 };
@@ -180,10 +163,8 @@ function getEventData() {
         hallContainer.style.display = "none";
         isHallOptionTrue = false;
       }
-      dropdownFR.onclick = () =>
-        location.replace("/creation-demande#" + data._id);
-      dropdownEN.onclick = () =>
-        location.replace("/creation-demande-en#" + data._id);
+      dropdownFR.onclick = () => location.replace("/creation-demande#" + data._id);
+      dropdownEN.onclick = () => location.replace("/creation-demande-en#" + data._id);
 
       if (data.illustration)
         EventIllustrationContainer.innerHTML = `<img style="width: 100%" src="${data.illustration.image}">`;
@@ -220,10 +201,8 @@ function getEventData() {
         });
       } else {
         englishMode
-          ? (ExampleProductsListContainer.innerHTML =
-              "No product examples available...")
-          : (ExampleProductsListContainer.innerHTML =
-              "Pas d'exemples de produits disponibles...");
+          ? (ExampleProductsListContainer.innerHTML = "No product examples available...")
+          : (ExampleProductsListContainer.innerHTML = "Pas d'exemples de produits disponibles...");
       }
 
       // lister les produits exclus
@@ -342,12 +321,7 @@ function getCatData() {
               NumberInput.value = 0;
               NumberInput.onchange = function () {
                 // modification des infos des produits qui seront envoyés à la bdd
-                updateEventRequest(
-                  category._id,
-                  product._id,
-                  NumberInput.value,
-                  product.price.amount
-                );
+                updateEventRequest(category._id, product._id, NumberInput.value, product.price.amount);
                 // modification du prix en fonction de la nouvelle valeur
                 updatePrice(NumberInput.value);
               };
@@ -404,9 +378,7 @@ function getCatData() {
 async function updateEventRequest(categoryId, productId, qty, price) {
   const uniqueId = `${categoryId}-${productId}`;
 
-  const isItemAlreadySelected = lineItems.find(
-    (item) => item.uniqueId === uniqueId
-  );
+  const isItemAlreadySelected = lineItems.find((item) => item.uniqueId === uniqueId);
   const quantity = +qty;
 
   // vérification de si le produits est pas déjà présent dans la variable lineItems
@@ -494,10 +466,8 @@ ButtonSendRequest.onclick = function (event) {
   ) {
     document.getElementById("ErrorSentForm").style.display = "block";
     englishMode
-      ? (document.getElementById("ErrorSentForm").innerHTML =
-          "A field is empty")
-      : (document.getElementById("ErrorSentForm").innerHTML =
-          "Un champ est vide");
+      ? (document.getElementById("ErrorSentForm").innerHTML = "A field is empty")
+      : (document.getElementById("ErrorSentForm").innerHTML = "Un champ est vide");
     return;
   }
 
@@ -505,10 +475,8 @@ ButtonSendRequest.onclick = function (event) {
   if (!RegexTVA.test(ClientNumTVA.value)) {
     document.getElementById("ErrorSentForm").style.display = "block";
     englishMode
-      ? (document.getElementById("ErrorSentForm").innerHTML =
-          "VAT number is incorrect")
-      : (document.getElementById("ErrorSentForm").innerHTML =
-          "Le numéro de TVA n'est pas bon");
+      ? (document.getElementById("ErrorSentForm").innerHTML = "VAT number is incorrect")
+      : (document.getElementById("ErrorSentForm").innerHTML = "Le numéro de TVA n'est pas bon");
     return;
   }
 
@@ -518,8 +486,7 @@ ButtonSendRequest.onclick = function (event) {
   }
 
   let billingAddress = ClientBillingAddress.value;
-  if (emailIsSameCheckbox.checked || !ClientBillingAddress.value)
-    billingAddress = ClientEmail.value;
+  if (emailIsSameCheckbox.checked || !ClientBillingAddress.value) billingAddress = ClientEmail.value;
 
   // json qui sera envoyé avec les infos de la requete
   const json = {
@@ -571,8 +538,7 @@ ButtonSendRequest.onclick = function (event) {
     } else {
       document.getElementById("ErrorSentForm").style.display = "block";
       englishMode
-        ? (document.getElementById("ErrorSentForm").innerHTML =
-            "Incorrect e-mail addresses or phone number")
+        ? (document.getElementById("ErrorSentForm").innerHTML = "Incorrect e-mail addresses or phone number")
         : (document.getElementById("ErrorSentForm").innerHTML =
             "Les addresses mail ou le numéro de téléphone sont incorrects");
     }
@@ -659,9 +625,7 @@ function sendRequestMailToAdmins(response) {
 }
 
 // affichage du formulaire d'infos client quand les produits ont étés bien remplis
-const getInfoClientContainer = document.getElementById(
-  "getInfoClientContainer"
-);
+const getInfoClientContainer = document.getElementById("getInfoClientContainer");
 const NextStepButton = document.getElementById("NextStepButton");
 const errorRequestFirstPart = document.getElementById("errorRequestFirstPart");
 const errorRequestNoItem = document.getElementById("errorRequestNoItem");

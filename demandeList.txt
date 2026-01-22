@@ -1,6 +1,6 @@
 // différencier les liens prod / staging
 let apiUrl = window.location.href.includes("webflow")
-  ? new URL("https://imagin-expo-backend-api.int.at-digital.fr/api/v1/")
+  ? new URL("https://staging-imagin-expo-backend-api.apps.imaginexpo.com")
   : new URL("https://api.imaginexpo.com/api/v1/");
 
 let currentPage = 1;
@@ -13,9 +13,7 @@ const requestContainer = document.getElementById("requestContainer");
 const PageNumberIndicator = document.getElementById("pageNumber");
 
 const requestOverContainer = document.getElementById("requestOverContainer");
-const RequestOverPageNumberIndicator = document.getElementById(
-  "RequestOverPageNumber"
-);
+const RequestOverPageNumberIndicator = document.getElementById("RequestOverPageNumber");
 
 PageNumberIndicator.innerHTML = "Page " + currentPage;
 RequestOverPageNumberIndicator.innerHTML = "Page " + currentPageRequestOver;
@@ -51,8 +49,7 @@ function getData(page) {
         demandeId.style.width = "15%";
         standRequest.appendChild(demandeId);
         const nom = document.createElement("p");
-        nom.innerHTML =
-          eventRequests.client.lastName + " " + eventRequests.client.firstName;
+        nom.innerHTML = eventRequests.client.lastName + " " + eventRequests.client.firstName;
         nom.style.marginBottom = "0px";
         nom.style.width = "15%";
         standRequest.appendChild(nom);
@@ -105,10 +102,7 @@ function getData(page) {
         standRequest.appendChild(demande);
         const detailButton = document.createElement("a");
         detailButton.innerHTML = "Détails";
-        detailButton.setAttribute(
-          "href",
-          "/ie-admin/admin-detail-demande#" + eventRequests._id
-        );
+        detailButton.setAttribute("href", "/ie-admin/admin-detail-demande#" + eventRequests._id);
         detailButton.style.marginBottom = "0px";
         detailButton.style.width = "15%";
         standRequest.appendChild(detailButton);
@@ -153,8 +147,7 @@ function getDataRequestOver(page) {
         demandeId.style.width = "15%";
         standRequest.appendChild(demandeId);
         const nom = document.createElement("p");
-        nom.innerHTML =
-          eventRequests.client.lastName + " " + eventRequests.client.firstName;
+        nom.innerHTML = eventRequests.client.lastName + " " + eventRequests.client.firstName;
         nom.style.marginBottom = "0px";
         nom.style.width = "15%";
         standRequest.appendChild(nom);
@@ -211,10 +204,7 @@ function getDataRequestOver(page) {
         standRequest.appendChild(demande);
         const detailButton = document.createElement("a");
         detailButton.innerHTML = "Détails";
-        detailButton.setAttribute(
-          "href",
-          "/ie-admin/admin-detail-demande#" + eventRequests._id
-        );
+        detailButton.setAttribute("href", "/ie-admin/admin-detail-demande#" + eventRequests._id);
         detailButton.style.marginBottom = "0px";
         detailButton.style.width = "15%";
         standRequest.appendChild(detailButton);
@@ -237,9 +227,7 @@ const NextButton = document.getElementById("nextPageRequest");
 const PreviousButton = document.getElementById("previousPageRequest");
 
 const NextButtonRequestOver = document.getElementById("nextPageRequestOver");
-const PreviousButtonRequestOver = document.getElementById(
-  "previousPageRequestOver"
-);
+const PreviousButtonRequestOver = document.getElementById("previousPageRequestOver");
 
 NextButton.onclick = function () {
   if (currentRequestLength === 10) {
