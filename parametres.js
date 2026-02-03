@@ -730,6 +730,10 @@ let currentProductPage = 1;
 const PageNumberIndicator = document.getElementById("pageNumber");
 PageNumberIndicator.innerHTML = "Page " + currentProductPage;
 
+const NextButton = document.getElementById("nextPageRequest");
+const PreviousButton = document.getElementById("previousPageRequest");
+const NbOfProductsIndicator = document.getElementById("nbOfProductsIndicator");
+
 // récupère et affiche les produits dans la liste
 function getProductData(page) {
   let request = new XMLHttpRequest();
@@ -747,6 +751,18 @@ function getProductData(page) {
     currentProductRequestLength = data.length;
     if (request.status >= 200 && request.status < 400) {
       const productContainer = document.getElementById("productList");
+      NbOfProductsIndicator.innerHTML = `${currentProductRequestLength}/100 produits`;
+      if (currentProductPage < 2) {
+        PreviousButton.style.display = "none";
+      } else {
+        PreviousButton.style.display = "block";
+      }
+
+      if (currentProductRequestLength > 99) {
+        NextButton.style.display = "block";
+      } else {
+        NextButton.style.display = "none";
+      }
 
       while (productContainer.firstChild) {
         productContainer.firstChild.remove();
@@ -849,9 +865,6 @@ function getProductData(page) {
 })();
 
 // configuration des boutons pour changer de pages dans les produits
-const NextButton = document.getElementById("nextPageRequest");
-const PreviousButton = document.getElementById("previousPageRequest");
-
 NextButton.onclick = function () {
   if (currentProductRequestLength === 100) {
     currentProductPage = currentProductPage + 1;
